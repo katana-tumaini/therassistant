@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EBC8F1"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/sessionDateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Date"
+        android:focusable="false"
+        android:clickable="true" />
+
+    <EditText
+        android:id="@+id/sessionTimeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Time"
+        android:focusable="false"
+        android:clickable="true" />
+
+    <EditText
+        android:id="@+id/sessionDetailsEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Details" />
+
+    <EditText
+        android:id="@+id/clientEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Client Email" />
+
+    <EditText
+        android:id="@+id/clientFirstNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Client First Name" />
+
+    <EditText
+        android:id="@+id/clientLastNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Client Last Name" />
+
+    <Button
+        android:id="@+id/saveSessionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Session" />
+
+</LinearLayout>
