@@ -1,5 +1,6 @@
 package com.example.therassistant2;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +29,29 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
     public void onBindViewHolder(@NonNull SessionViewHolder holder, int position) {
         Session session = sessions.get(position);
 
-        holder.dateTextView.setText(session.getDate());
-        holder.timeTextView.setText(session.getTime());
-        holder.detailsTextView.setText(session.getDetails());
-        holder.clientNameTextView.setText(session.getClientFirstName() + " " + session.getClientLastName());
-        holder.therapistNameTextView.setText(session.getTherapistName()); // Directly set the therapist name
-    }
+        // 🔥 ONLY formatting added — your data stays unchanged:
 
+        holder.dateTextView.setText(
+                Html.fromHtml("<b>Date:</b> " + session.getDate())
+        );
+
+        holder.timeTextView.setText(
+                Html.fromHtml("<b>Time:</b> " + session.getTime())
+        );
+
+        holder.detailsTextView.setText(
+                Html.fromHtml("<b>Details:</b> " + session.getDetails())
+        );
+
+        holder.clientNameTextView.setText(
+                Html.fromHtml("<b>Client:</b> " +
+                        session.getClientFirstName() + " " + session.getClientLastName())
+        );
+
+        holder.therapistNameTextView.setText(
+                Html.fromHtml("<b>Therapist:</b> " + session.getTherapistName())
+        );
+    }
 
     @Override
     public int getItemCount() {
