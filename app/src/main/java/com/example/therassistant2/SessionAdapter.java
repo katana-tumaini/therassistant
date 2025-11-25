@@ -36,7 +36,7 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
         );
 
         holder.timeTextView.setText(
-                Html.fromHtml("<b>Time:</b> " + session.getTime())
+                Html.fromHtml("<b>Time (24hr format):</b> " + session.getTime())
         );
 
         holder.detailsTextView.setText(
