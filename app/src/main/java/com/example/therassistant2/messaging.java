@@ -2,7 +2,6 @@ package com.example.therassistant2;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -211,7 +209,7 @@ public class messaging extends AppCompatActivity {
             Chat chat = getItem(position);
 
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_chat, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_chat, parent, false);
             }
 
             TextView chatName = convertView.findViewById(R.id.chatName);

@@ -29,8 +29,6 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
     public void onBindViewHolder(@NonNull SessionViewHolder holder, int position) {
         Session session = sessions.get(position);
 
-        // 🔥 ONLY formatting added — your data stays unchanged:
-
         holder.dateTextView.setText(
                 Html.fromHtml("<b>Date:</b> " + session.getDate())
         );

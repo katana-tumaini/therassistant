@@ -21,7 +21,7 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
         Chat chat = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_chat, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_chat, parent, false);
         }
 
         TextView chatName = convertView.findViewById(R.id.chatName);
