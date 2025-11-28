@@ -7,33 +7,49 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class messageadapter extends ArrayAdapter<Message> {
 
-    public messageadapter(Context context, List<Message> messages) {
+    private String currentUserId;
+
+    public messageadapter(Context context, List<Message> messages, String currentUserId) {
         super(context, 0, messages);
+        this.currentUserId = currentUserId;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         Message message = getItem(position);
 
+        if (message == null) return convertView;
+
+        boolean isSentByUser = message.getSenderId().equals(currentUserId);
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_message, parent, false);
+            if (isSentByUser) {
+                convertView = LayoutInflater.from(getContext())
+                        .inflate(R.layout.item_sent_message, parent, false);
+            } else {
+                convertView = LayoutInflater.from(getContext())
+                        .inflate(R.layout.item_received_message, parent, false);
+            }
         }
 
         TextView messageText = convertView.findViewById(R.id.messageText);
-        TextView messageTimestamp = convertView.findViewById(R.id.messageTimestamp);
-        TextView messageSenderId = convertView.findViewById(R.id.messageSenderId);
+        TextView messageTime = convertView.findViewById(R.id.messageTime);
 
-        if (message != null) {
-            messageText.setText(message.getText());
-            messageTimestamp.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date(message.getTimestamp())));
-            messageSenderId.setText(message.getSenderId());
-        }
+        messageText.setText(message.getText());
+
+        String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT)
+                .format(new Date(message.getTimestamp()));
+
+        messageTime.setText(formattedTime);
 
         return convertView;
     }
