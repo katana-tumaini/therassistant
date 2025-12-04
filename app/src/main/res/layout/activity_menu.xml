@@ -103,7 +103,9 @@
                 android:src="@drawable/baseline_edit_calendar_24"
                 android:contentDescription="Calendar"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:layout_marginLeft="130dp"/>
+
 
             <TextView
                 android:id="@+id/calendarLabel"

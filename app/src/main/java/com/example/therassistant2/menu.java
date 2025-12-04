@@ -65,7 +65,7 @@ public class menu extends AppCompatActivity {
     }
 
     private void openMessagesActivity() {
-        Intent intent = new Intent(this, messaging.class);
+        Intent intent = new Intent(this, ChatListActivity.class);
         startActivity(intent);
     }
 
