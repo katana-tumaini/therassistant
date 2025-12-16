@@ -3,24 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:layout_marginTop="30dp"
-    android:background="#FFFFFF">
+    android:padding="16dp"
+    android:background="@drawable/card_background"
+    android:layout_marginTop="16dp">
 
-    <ImageView
-        android:id="@+id/profileImage"
+    <!-- Profile Image -->
+    <FrameLayout
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="center_vertical"
-        android:contentDescription="Profile Image"
-        android:src="@drawable/baseline_account_circle_24" />
+        android:background="@drawable/circular_background"
+        android:padding="4dp">
 
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_account_circle_24"
+            android:contentDescription="Profile Image"/>
+    </FrameLayout>
+
+    <!-- Name & Type -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingStart="8dp">
+        android:paddingStart="16dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -50,15 +60,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="#000000" />
+            android:textColor="#555555" />
     </LinearLayout>
 
+    <!-- Message Icon -->
     <ImageView
         android:id="@+id/messageIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center_vertical"
-        android:contentDescription="Message Icon"
         android:src="@drawable/baseline_message_24"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:contentDescription="Message Icon"/>
 </LinearLayout>

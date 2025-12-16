@@ -24,6 +24,9 @@
             android:name=".EditTherapistActivity"
             android:exported="false" />
         <activity
+            android:name=".ChatListActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddEditClientActivity"
             android:exported="false" />
         <activity
