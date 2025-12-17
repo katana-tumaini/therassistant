@@ -3,6 +3,7 @@ package com.example.therassistant2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,13 +26,14 @@ public class therapists extends AppCompatActivity {
     private TherapistAdapter adapter;
     private List<Therapist> therapistList;
     private DatabaseReference therapistsRef;
+    private ImageView messageIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_therapists);
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.therapistsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         therapistList = new ArrayList<>();
@@ -83,6 +85,15 @@ public class therapists extends AppCompatActivity {
                 intent.putExtra("therapist", therapist);
                 startActivity(intent);
             }
+            @Override
+            public void onMessageClick(Therapist therapist) {
+                Intent intent = new Intent(therapists.this, messaging.class);
+                intent.putExtra("recipientId", therapist.getUid());
+                intent.putExtra("recipientName", therapist.getFirstName() + " " + therapist.getLastName());
+                startActivity(intent);
+            }
         });
+
+
     }
 }

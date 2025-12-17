@@ -47,7 +47,14 @@ public class TherapistAdapter extends RecyclerView.Adapter<TherapistAdapter.Ther
                 onItemClickListener.onItemClick(therapist);
             }
         });
+
+        holder.messageIcon.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onMessageClick(therapist);
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -60,10 +67,11 @@ public class TherapistAdapter extends RecyclerView.Adapter<TherapistAdapter.Ther
 
     public interface OnItemClickListener {
         void onItemClick(Therapist therapist);
+        void onMessageClick(Therapist therapist);
     }
 
     public static class TherapistViewHolder extends RecyclerView.ViewHolder {
-        ImageView profileImageView;
+        ImageView profileImageView, messageIcon;
         TextView nameTextView, typeTextView, therapistsecondname;
 
         public TherapistViewHolder(@NonNull View itemView) {
@@ -72,6 +80,7 @@ public class TherapistAdapter extends RecyclerView.Adapter<TherapistAdapter.Ther
             nameTextView = itemView.findViewById(R.id.therapistName);
             typeTextView = itemView.findViewById(R.id.therapistType);
             therapistsecondname = itemView.findViewById(R.id.therapistSecondName);
+            messageIcon = itemView.findViewById(R.id.messageIcon);
 
         }
     }
