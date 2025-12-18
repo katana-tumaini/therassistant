@@ -31,6 +31,8 @@ android {
 
 dependencies {
 
+    implementation("com.github.User:Repo:Tag")
+    implementation("com.github.yuyakaido:CardStackView:2.3.4")
     implementation("com.google.firebase:firebase-database:20.0.4")
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-database:21.0.0")

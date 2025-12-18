@@ -14,18 +14,17 @@ public class Chat {
     public Chat() {}
 
     // Full constructor
-    public Chat(String chatId, String firstName, String lastName, List<String> participants, String lastMessage, long lastTimestamp) {
+    public Chat(String chatId, String firstName, String lastName, String lastMessage, long lastTimestamp) {
         this.chatId = chatId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.participants = participants;
         this.lastMessage = lastMessage;
         this.lastTimestamp = lastTimestamp;
     }
 
     // Helper simpler constructor if you don't have participants yet
     public Chat(String chatId, String firstName, String lastName, List<String> participants) {
-        this(chatId, firstName, lastName, participants, "", 0L);
+        this(chatId, firstName, lastName, "", 0L);
     }
 
     // Getters and setters
