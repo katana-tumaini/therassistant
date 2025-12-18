@@ -51,6 +51,9 @@ public class therapists extends AppCompatActivity {
                     if (therapist != null) {
                         // Using setters to ensure data is set correctly
 
+                        String uid = postSnapshot.getKey();
+                        therapist.setUid(uid);
+
                         therapist.setName(therapist.getFirstName());
                         therapist.settherapisttype(therapist.gettherapisttype());
                         therapist.setPhoneNumber(therapist.getPhoneNumber());
