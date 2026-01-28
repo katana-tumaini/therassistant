@@ -35,13 +35,12 @@ public class therapists extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_therapists);
 
-        // IMPORTANT: Your activity_therapists.xml must have this RecyclerView id
         recyclerView = findViewById(R.id.cardStackRecycler);
 
         therapistList = new ArrayList<>();
         adapter = new CardAdapter(this, therapistList);
 
-        // 🔥 CUSTOM STACK LAYOUT (overlapping cards)
+        // CUSTOM STACK LAYOUT (overlapping cards)
         recyclerView.setLayoutManager(new RecyclerView.LayoutManager() {
             @Override
             public RecyclerView.LayoutParams generateDefaultLayoutParams() {
@@ -137,18 +136,18 @@ public class therapists extends AppCompatActivity {
                     @Override
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
-                        int position = viewHolder.getBindingAdapterPosition();
+                        int position = viewHolder.getAdapterPosition();
                         if (position == RecyclerView.NO_POSITION) return;
 
                         Therapist therapist = therapistList.get(position);
 
                         if (direction == ItemTouchHelper.LEFT) {
-                            // ❌ SKIP
+                            // SKIP
                             therapistList.remove(position);
                             adapter.notifyDataSetChanged();
 
                         } else if (direction == ItemTouchHelper.UP) {
-                            // ✅ ACCEPT → messaging
+                            // ACCEPT → messaging
                             openMessaging(therapist);
 
                             therapistList.remove(position);

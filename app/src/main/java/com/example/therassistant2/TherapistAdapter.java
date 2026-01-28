@@ -44,7 +44,7 @@ public class TherapistAdapter extends RecyclerView.Adapter<TherapistAdapter.View
 
         // Load the image using Glide
         Glide.with(context)
-                .load(therapist.getProfilePictureUrl()) // Assuming you have a URL for the picture
+                .load(therapist.getProfileImageUrl()) // Assuming you have a URL for the picture
                 .placeholder(R.drawable.default_profile_placeholder) // Show while loading
                 .error(R.drawable.default_profile_placeholder) // Show if URL is invalid
                 .into(holder.image);
