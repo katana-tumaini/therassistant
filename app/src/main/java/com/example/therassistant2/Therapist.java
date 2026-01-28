@@ -13,12 +13,14 @@ public class Therapist implements Serializable {
     private String lastName;
     private String email;
     private String password;
+    private String profilePictureUrl;
+    private String Age;
 
     public Therapist() {
         // Default constructor required for calls to DataSnapshot.getValue(Therapist.class)
     }
 
-    public Therapist(String uid, String name, String TherapistType, String phoneNumber, String availability, String profileImageUrl, String firstName, String lastName, String email, String password) {
+    public Therapist(String uid, String name, String TherapistType, String phoneNumber, String availability, String profileImageUrl, String firstName, String lastName, String email, String password, String profilePictureUrl, String Age) {
         this.uid = uid;
         this.name = name;
         this.therapistType = TherapistType;
@@ -29,6 +31,8 @@ public class Therapist implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.profilePictureUrl = profilePictureUrl;
+        this.Age = Age;
     }
 
     // Getters
@@ -39,7 +43,7 @@ public class Therapist implements Serializable {
     public String getName() {
         return name;
     }
-
+    public String getProfilePictureUrl() { return profilePictureUrl;}
     public String gettherapisttype() {
         return therapistType;
     }
@@ -71,6 +75,10 @@ public class Therapist implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getAge() {
+        return Age;
     }
 
     // Setters
@@ -113,5 +121,12 @@ public class Therapist implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public void setAge(String age) {
+        Age = age;
     }
 }

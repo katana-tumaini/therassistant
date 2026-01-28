@@ -7,7 +7,7 @@
     android:background="#EFD3F5"
     android:padding="16dp">
 
-    <!-- Header -->
+
     <TextView
         android:id="@+id/headerTitle"
         android:layout_width="wrap_content"
@@ -19,12 +19,18 @@
         android:layout_marginBottom="20dp"
         android:layout_gravity="center_horizontal"/>
 
-    <com.yuyakaido.android.cardstackview.CardStackView
-        android:id="@+id/card_stack_view"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cardStackRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:overScrollMode="never"
         android:clipToPadding="false"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="70dp"
+        android:layout_marginTop="20dp"
         android:padding="8dp"/>
+
 
 </LinearLayout>
