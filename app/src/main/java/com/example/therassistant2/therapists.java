@@ -165,8 +165,7 @@ public class therapists extends AppCompatActivity {
 
         // These match what your old code used:
         intent.putExtra("recipientId", therapist.getUid());
-        intent.putExtra("recipientName",
-                therapist.getFirstName() + " " + therapist.getLastName());
+        intent.putExtra("recipientName", therapist.getFirstName() + " " + therapist.getLastName());
 
         // Extra useful data if you want:
         intent.putExtra("therapistType", therapist.gettherapisttype());

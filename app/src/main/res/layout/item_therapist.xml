@@ -3,76 +3,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="8dp"
-    android:layout_margin="8dp">
+    app:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- 1. The Therapist's Profile Picture (Background) -->
+        <!-- Background image -->
         <ImageView
             android:id="@+id/therapist_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/baseline_account_circle_24" /> <!-- Placeholder image -->
+            android:src="@drawable/baseline_account_circle_24" />
 
-        <!-- 2. The Gradient "Hue" (Scrim) -->
-        <!-- This View is aligned to the bottom of the parent -->
+        <!-- Scrim overlay ON TOP of image -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="match_parent"
             android:background="@drawable/gradient_scrim" />
 
-        <!-- 3. Container for the Text Info -->
-        <!-- This layout holds the text and is aligned to the bottom -->
+        <!-- Text info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:orientation="vertical"
             android:padding="16dp">
-
-            <!-- Name and Age -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/therapist_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Jessica Smith"
+                    android:text="Name"
                     android:textColor="@android:color/white"
                     android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/therapist_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                <TextView
-                    android:id="@+id/therapist_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="32"
-                    android:textColor="@android:color/white"
-                    android:textSize="22sp" />
-            </LinearLayout>
 
-            <!-- Therapist Type -->
+
             <TextView
                 android:id="@+id/therapist_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Cognitive Behavioral Therapist"
+                android:text="Therapist Type"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
-
         </LinearLayout>
 
-    </RelativeLayout>
+    </FrameLayout>
+
 </androidx.cardview.widget.CardView>

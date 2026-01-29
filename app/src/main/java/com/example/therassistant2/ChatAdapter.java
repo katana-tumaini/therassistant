@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
@@ -29,13 +31,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
+
         Chat chat = chats.get(position);
-        holder.userName.setText(chat.getDisplayName());
-        holder.lastMessage.setText(chat.getLastMessage() == null || chat.getLastMessage().isEmpty() ? "Tap to view messages" : chat.getLastMessage());
+
+        String name = chat.getDisplayName();
+        holder.userName.setText(name == null || name.isEmpty() ? "Unknown User" : name);
+
+        String lastMsg = chat.getLastMessage();
+        holder.lastMessage.setText(lastMsg == null || lastMsg.isEmpty() ? "Tap to view messages" : lastMsg);
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, messaging.class);
             intent.putExtra("chatId", chat.getChatId());
+
+            // Optional but recommended if your messaging needs it
+            intent.putExtra("recipientName", name);
+
             context.startActivity(intent);
         });
     }
@@ -47,6 +58,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView userName, lastMessage;
+
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.userName);

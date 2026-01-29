@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide; // Import Glide
+import com.bumptech.glide.Glide;
 import com.example.therassistant2.R;
 import com.example.therassistant2.Therapist;
 
@@ -18,7 +18,6 @@ public class TherapistAdapter extends RecyclerView.Adapter<TherapistAdapter.View
 
     private List<Therapist> therapistList;
     private Context context;
-    // Keep your listener for handling clicks
     private OnItemClickListener onItemClickListener;
 
     public TherapistAdapter(List<Therapist> therapistList, Context context) {
@@ -39,17 +38,16 @@ public class TherapistAdapter extends RecyclerView.Adapter<TherapistAdapter.View
 
         // Set the text data
         holder.name.setText(therapist.getFirstName() + " " + therapist.getLastName());
-        holder.age.setText(String.valueOf(therapist.getAge())); // Assuming getAge() returns an int
-        holder.type.setText(therapist.gettherapisttype()); // Assuming you have this field
+        holder.type.setText(therapist.gettherapisttype());
 
         // Load the image using Glide
         Glide.with(context)
-                .load(therapist.getProfileImageUrl()) // Assuming you have a URL for the picture
-                .placeholder(R.drawable.default_profile_placeholder) // Show while loading
+                .load(therapist.getProfileImageUrl())
+                .placeholder(R.drawable.default_profile_placeholder)
                 .error(R.drawable.default_profile_placeholder) // Show if URL is invalid
                 .into(holder.image);
 
-        // Set listeners for clicks (no changes needed here)
+
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(therapist);
@@ -62,21 +60,19 @@ public class TherapistAdapter extends RecyclerView.Adapter<TherapistAdapter.View
         return therapistList.size();
     }
 
-    // ViewHolder now includes all the new views
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, age, type;
+        TextView name, type;
         ImageView image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.therapist_name);
-            age = itemView.findViewById(R.id.therapist_age);
             type = itemView.findViewById(R.id.therapist_type);
             image = itemView.findViewById(R.id.therapist_image);
         }
     }
 
-    // Interface for click events (no changes needed here)
     public interface OnItemClickListener {
         void onItemClick(Therapist therapist);
         void onMessageClick(Therapist therapist);
