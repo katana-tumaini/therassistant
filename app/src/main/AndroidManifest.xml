@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Required permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- Corrected storage permission for modern Android -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
 
     <application
@@ -17,75 +22,38 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Therassistant2"
         tools:targetApi="31">
-        <activity
-            android:name=".UpcomingSessionsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditTherapistActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ChatListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddEditClientActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ViewClientActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ClientProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ClientActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddSession"
-            android:exported="false" />
-        <activity
-            android:name=".TherapistHome"
-            android:exported="false" />
-        <activity
-            android:name=".Report"
-            android:exported="false" />
-        <activity
-            android:name=".Aboutus"
-            android:exported="false" />
-        <activity
-            android:name=".Editinfo"
-            android:exported="false" />
-        <activity
-            android:name=".TherapistSignup"
-            android:exported="false" />
-        <activity
-            android:name=".TherapistProfile"
-            android:exported="false" />
-        <activity
-            android:name=".settings"
-            android:exported="false" />
-        <activity
-            android:name=".messaging"
-            android:exported="false" />
-        <activity
-            android:name=".calendar"
-            android:exported="false" />
-        <activity
-            android:name=".therapists"
-            android:exported="false" />
-        <activity
-            android:name=".category"
-            android:exported="false" />
-        <activity
-            android:name=".menu"
-            android:exported="false" />
-        <activity
-            android:name=".Signup"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+
+        <!-- Set exported="true" for activities started by other activities -->
+        <activity android:name=".UpcomingSessionsActivity" android:exported="true" />
+        <activity android:name=".EditTherapistActivity" android:exported="true" />
+        <activity android:name=".ChatListActivity" android:exported="true" />
+        <activity android:name=".AddEditClientActivity" android:exported="true" />
+        <activity android:name=".ViewClientActivity" android:exported="true" />
+        <activity android:name=".ClientProfileActivity" android:exported="true" />
+        <activity android:name=".ClientActivity" android:exported="true" />
+        <activity android:name=".AddSession" android:exported="true" />
+        <activity android:name=".TherapistHome" android:exported="true" />
+        <activity android:name=".Report" android:exported="true" />
+        <activity android:name=".Aboutus" android:exported="true" />
+        <activity android:name=".Editinfo" android:exported="true" />
+        <activity android:name=".TherapistSignup" android:exported="true" />
+        <activity android:name=".TherapistProfile" android:exported="true" />
+        <activity android:name=".settings" android:exported="true" />
+        <activity android:name=".messaging" android:exported="true" />
+        <activity android:name=".calendar" android:exported="true" />
+        <activity android:name=".therapists" android:exported="true" />
+        <activity android:name=".category" android:exported="true" />
+        <activity android:name=".menu" android:exported="true" />
+        <activity android:name=".Signup" android:exported="true" />
+
+        <!-- CRITICAL FIX: MainActivity must be exported to be launched from SplashActivity -->
+        <activity android:name=".MainActivity" android:exported="true"/>
+
+        <!-- Launcher Activity is correct -->
+        <activity android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
