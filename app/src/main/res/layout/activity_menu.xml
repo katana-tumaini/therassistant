@@ -7,157 +7,278 @@
     android:background="#EBC8F1"
     tools:context=".menu">
 
-    <!-- Top Bar -->
-    <LinearLayout
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/topBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="?attr/colorPrimary"
-        android:backgroundTint="#641BE4"
+        android:layout_margin="14dp"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#641BE4"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/therasistantlogo"
-            android:contentDescription="Therassistant Logo" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Home"
-            android:layout_marginLeft="10dp"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:gravity="left"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/profileCircle"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/baseline_account_circle_24"
-            android:contentDescription="User Profile"
-            android:clickable="true"
-            android:focusable="true" />
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/therasistantlogo"
+                android:contentDescription="Therassistant Logo" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Therassistant"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/profileCircle"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/baseline_account_circle_24"
+                android:contentDescription="User Profile"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Welcome back "
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#3B1340"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/subText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="What would you like to do today?"
+        android:textSize="14sp"
+        android:textColor="#5A2C5C"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/welcomeText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <LinearLayout
+        android:id="@+id/menuContainer"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toTopOf="@id/messageButton"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:padding="16dp">
+        app:layout_constraintTop_toBottomOf="@id/subText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16dp">
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#F5DDF8">
 
-            <ImageButton
+            <LinearLayout
                 android:id="@+id/therapistsButton"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/baseline_people_24"
-                android:contentDescription="Therapists"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <TextView
-                android:id="@+id/therapistsLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Therapists"
-                android:textSize="18sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageButton
-                android:id="@+id/calendarButton"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/baseline_edit_calendar_24"
-                android:contentDescription="Calendar"
+                android:orientation="horizontal"
+                android:padding="18dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginLeft="130dp"/>
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/baseline_people_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Therapists"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#3B1340" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Browse and connect with therapists"
+                        android:textSize="13sp"
+                        android:textColor="#6A3C66" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/baseline_arrow_forward_ios_24" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
 
-            <TextView
-                android:id="@+id/calendarLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calendar"
-                android:textSize="18sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16dp">
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#F5DDF8">
 
-            <ImageButton
-                android:id="@+id/upcomingSessionsButton"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/baseline_event_24"
-                android:contentDescription="Upcoming Sessions"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <TextView
-                android:id="@+id/upcomingSessionsLabel"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/calendarButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sessions"
-                android:textSize="18sp"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center_vertical" />
+                android:orientation="horizontal"
+                android:padding="18dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/baseline_edit_calendar_24" />
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calendar"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#3B1340" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View your sessions and schedule"
+                        android:textSize="13sp"
+                        android:textColor="#6A3C66" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/baseline_arrow_forward_ios_24" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#F5DDF8">
+
+            <LinearLayout
+                android:id="@+id/upcomingSessionsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="18dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/baseline_event_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sessions"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#3B1340" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="See upcoming therapy sessions"
+                        android:textSize="13sp"
+                        android:textColor="#6A3C66" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/baseline_arrow_forward_ios_24" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
-    <!-- Message Button -->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/messageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="18dp"
         android:src="@drawable/baseline_message_24"
         android:contentDescription="Messages"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:clickable="true"
         android:focusable="true" />
 
