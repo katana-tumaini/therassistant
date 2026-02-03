@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#EBC8F1">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/settingsTitle"
         android:layout_width="wrap_content"
@@ -19,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="60dp" />
 
-    <!-- Card Container -->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/settingsCard"
         android:layout_width="0dp"
