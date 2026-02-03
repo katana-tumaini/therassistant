@@ -17,7 +17,7 @@
             android:textSize="18sp"
             android:textColor="#000000"
             android:padding="16dp"
-            android:background="@drawable/background_with_border"/>
+            android:background="@drawable/rounded_button" />
 
     </LinearLayout>
 </ScrollView>
