@@ -1,46 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:background="#EBC8F1">
 
-    <EditText
-        android:id="@+id/clientFirstNameEditText"
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/addClientCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="First Name"
-        android:inputType="textPersonName"
-        android:layout_marginBottom="8dp" />
+        android:layout_margin="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#F7E6FA"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <EditText
-        android:id="@+id/clientLastNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Last Name"
-        android:inputType="textPersonName"
-        android:layout_marginBottom="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    <EditText
-        android:id="@+id/clientEmailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/titleAddClient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Client"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#3B1E6D"
+                android:layout_marginBottom="16dp" />
 
-    <EditText
-        android:id="@+id/clientDiagnosisEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Diagnosis"
-        android:inputType="text"
-        android:layout_marginBottom="16dp" />
+            <EditText
+                android:id="@+id/clientFirstNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="First Name"
+                android:inputType="textPersonName"
+                android:padding="14dp"
+                android:background="@drawable/rounded_button"
+                android:layout_marginBottom="12dp" />
 
-    <Button
-        android:id="@+id/saveClientButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save" />
-</LinearLayout>
+            <EditText
+                android:id="@+id/clientLastNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Last Name"
+                android:inputType="textPersonName"
+                android:padding="14dp"
+                android:background="@drawable/rounded_button"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/clientEmailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="14dp"
+                android:background="@drawable/rounded_button"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/clientDiagnosisEditText"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="Diagnosis"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:padding="14dp"
+                android:background="@drawable/rounded_button"
+                android:layout_marginBottom="18dp" />
+
+            <Button
+                android:id="@+id/saveClientButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="Save Client"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#641BE4"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
