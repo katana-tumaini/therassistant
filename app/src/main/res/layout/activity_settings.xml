@@ -1,39 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:background="#EBC8F1">
 
+    <!-- Title -->
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/settingsTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Settings"
-        android:textSize="30dp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
-        android:textColor="#000000"
-        android:gravity="center"
-        android:layout_marginBottom="32dp"/>
+        android:textColor="#3B1340"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="60dp" />
 
-    <Button
-        android:id="@+id/editInfoButton"
-        android:layout_width="match_parent"
+    <!-- Card Container -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/settingsCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Edit Information" />
+        android:layout_margin="24dp"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#E0B0FF"
+        app:layout_constraintTop_toBottomOf="@id/settingsTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/aboutUsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="About Us" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp">
 
-    <Button
-        android:id="@+id/reportProblemButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Report a Problem" />
+            <Button
+                android:id="@+id/editInfoButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Edit Information"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#641BE4"
+                android:layout_marginBottom="12dp" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/aboutUsButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="About Us"
+                android:textStyle="bold"
+                android:textColor="#641BE4"
+                android:backgroundTint="#F3E8FF"
+                android:layout_marginBottom="12dp" />
+
+            <Button
+                android:id="@+id/reportProblemButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Report a Problem"
+                android:textStyle="bold"
+                android:textColor="#641BE4"
+                android:backgroundTint="#F3E8FF" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
