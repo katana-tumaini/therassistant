@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     android:background="#641BE4">
 
-    <ImageView
-        android:id="@+id/logoImage"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        android:src="@drawable/therassistantlog"
-        android:scaleType="fitCenter"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieSplash"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:lottie_rawRes="@raw/splash_anim"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

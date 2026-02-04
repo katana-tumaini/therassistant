@@ -55,6 +55,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0") // This processor is correct
 
+    // lottie animation
+    implementation("com.airbnb.android:lottie:6.1.0")
     // Testing Libraries
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
