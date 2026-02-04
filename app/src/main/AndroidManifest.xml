@@ -2,11 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Required permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Corrected storage permission for modern Android -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
@@ -23,7 +21,7 @@
         android:theme="@style/Theme.Therassistant2"
         tools:targetApi="31">
 
-        <!-- Set exported="true" for activities started by other activities -->
+
         <activity android:name=".UpcomingSessionsActivity" android:exported="true" />
         <activity android:name=".EditTherapistActivity" android:exported="true" />
         <activity android:name=".ChatListActivity" android:exported="true" />
@@ -46,10 +44,9 @@
         <activity android:name=".menu" android:exported="true" />
         <activity android:name=".Signup" android:exported="true" />
 
-        <!-- CRITICAL FIX: MainActivity must be exported to be launched from SplashActivity -->
+
         <activity android:name=".MainActivity" android:exported="true"/>
 
-        <!-- Launcher Activity is correct -->
         <activity android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
