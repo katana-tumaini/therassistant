@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- PROFILE HEADER -->
+        <!-- profile -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,14 +28,14 @@
                 android:gravity="center"
                 android:padding="24dp">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profileImageView"
-                    android:layout_width="115dp"
-                    android:layout_height="115dp"
-                    android:src="@drawable/baseline_account_circle_24"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/circular_background"
-                    android:padding="8dp" />
+                    app:shapeAppearanceOverlay="@style/circleImage"
+                    android:src="@drawable/baseline_account_circle_24"/>
+                >
 
                 <TextView
                     android:id="@+id/nameTextView"
@@ -122,7 +122,7 @@
                     android:textSize="16sp"
                     android:textColor="#2C1A35"
                     android:layout_height="25dp"
-                    android:layout_width="150dp"/>
+                    android:layout_width="300dp"/>
 
             </LinearLayout>
 
