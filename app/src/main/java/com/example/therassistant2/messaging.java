@@ -44,17 +44,16 @@ public class messaging extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        // 1. Initialize Views
+
         messageListView = findViewById(R.id.messageListView);
         messageInput = findViewById(R.id.messageInput);
         sendButton = findViewById(R.id.sendButton);
         chatHeader = findViewById(R.id.chatTitle);
 
-        // 2. Initialize Firebase
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        // 3. Get data from the Intent
+
         String recipientId = getIntent().getStringExtra("recipientId");
         String recipientName = getIntent().getStringExtra("recipientName");
 
@@ -63,12 +62,12 @@ public class messaging extends AppCompatActivity {
             chatHeader.setText(recipientName);
         }
 
-        // 4. Setup the ListView and Adapter
+        // Setup the ListView and Adapter
         messageList = new ArrayList<>();
         messageAdapter = new messageadapter(this, messageList, auth.getCurrentUser().getUid());
         messageListView.setAdapter(messageAdapter);
 
-        // 5. Find or create the chat room. This is the key step.
+        // Find or create the chat room.
         if (recipientId != null && !recipientId.isEmpty()) {
             findOrCreateChat(recipientId);
         } else {
@@ -76,10 +75,10 @@ public class messaging extends AppCompatActivity {
             finish(); // Close the activity if there's no one to talk to
         }
 
-        // 6. Set the send button listener
+        // Set the send button listener
         sendButton.setOnClickListener(v -> {
             String text = messageInput.getText().toString().trim();
-            // Only send if there's text AND we have a valid chat room ID
+
             if (!text.isEmpty() && currentChatId != null) {
                 sendMessage(text);
             }

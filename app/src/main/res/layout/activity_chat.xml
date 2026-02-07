@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#EBC8F1">
 
-    <!-- Header -->
     <TextView
         android:id="@+id/chatTitle"
         android:layout_width="wrap_content"
@@ -16,7 +16,6 @@
         android:layout_centerHorizontal="true"
         android:padding="12dp"/>
 
-    <!-- Messages -->
     <ListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
@@ -26,7 +25,6 @@
         android:divider="@null"
         android:padding="12dp"/>
 
-    <!-- Input Bar -->
     <LinearLayout
         android:id="@+id/messageInputContainer"
         android:layout_width="match_parent"
@@ -43,14 +41,17 @@
             android:layout_weight="1"
             android:hint="Type a message"
             android:padding="10dp"
-            android:background="@android:drawable/editbox_background"/>
+            android:layout_marginRight="8dp"
+            android:background="@drawable/rounded_button"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send"
-            android:layout_marginStart="8dp"/>
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_send"
+            android:background="@drawable/rounded_button"
+            android:padding="10dp"/>
+
     </LinearLayout>
 
 </RelativeLayout>
