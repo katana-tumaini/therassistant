@@ -31,7 +31,7 @@ public class TherapistProfile extends AppCompatActivity {
 
         if (therapist != null) {
 
-            // ✅ Best name (First + Last OR name)
+            //  (First + Last OR name)
             String fullName = "";
             if (!TextUtils.isEmpty(therapist.getFirstName()) || !TextUtils.isEmpty(therapist.getLastName())) {
                 fullName = (therapist.getFirstName() == null ? "" : therapist.getFirstName()) +
