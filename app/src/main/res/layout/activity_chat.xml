@@ -1,27 +1,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#EBC8F1">
 
-    <TextView
-        android:id="@+id/chatTitle"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chat"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#4A2448"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:padding="12dp"/>
+        android:layout_margin="14dp"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#641BE4">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="14dp">
+
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:background="@null"
+                app:tint="@android:color/white"/>
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/baseline_account_circle_24"
+                android:background="@drawable/circular_background"
+                android:padding="4dp"
+                android:clickable="true"/>
+
+            <TextView
+                android:id="@+id/chatUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="12dp"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
     <ListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/chatTitle"
-        android:layout_above="@+id/messageInputContainer"
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/messageInputContainer"
         android:divider="@null"
         android:padding="12dp"/>
 
@@ -41,7 +78,7 @@
             android:layout_weight="1"
             android:hint="Type a message"
             android:padding="10dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_button"/>
 
         <ImageButton
