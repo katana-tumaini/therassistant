@@ -1,56 +1,101 @@
 package com.example.therassistant2;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class messageadapter extends ArrayAdapter<Message> {
+public class messageadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private List<Message> messages;
     private String currentUserId;
 
-    public messageadapter(Context context, List<Message> messages, String currentUserId) {
-        super(context, 0, messages);
+    private static final int VIEW_SENT = 0;
+    private static final int VIEW_RECEIVED = 1;
+
+    public messageadapter(List<Message> messages, String currentUserId) {
+        this.messages = messages;
         this.currentUserId = currentUserId;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        Message message = messages.get(position);
+        return message.getSenderId().equals(currentUserId)
+                ? VIEW_SENT
+                : VIEW_RECEIVED;
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        Message message = getItem(position);
+    public RecyclerView.ViewHolder onCreateViewHolder(
+            @NonNull ViewGroup parent,
+            int viewType) {
 
-        if (message == null) return convertView;
+        View view;
 
-        boolean isSentByUser = message.getSenderId().equals(currentUserId);
-
-        if (convertView == null) {
-            if (isSentByUser) {
-                convertView = LayoutInflater.from(getContext())
-                        .inflate(R.layout.item_sent_message, parent, false);
-            } else {
-                convertView = LayoutInflater.from(getContext())
-                        .inflate(R.layout.item_received_message, parent, false);
-            }
+        if (viewType == VIEW_SENT) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_sent_message, parent, false);
+            return new SentViewHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_received_message, parent, false);
+            return new ReceivedViewHolder(view);
         }
+    }
 
-        TextView messageText = convertView.findViewById(R.id.messageText);
-        TextView messageTime = convertView.findViewById(R.id.messageTime);
+    @Override
+    public void onBindViewHolder(
+            @NonNull RecyclerView.ViewHolder holder,
+            int position) {
 
-        messageText.setText(message.getText());
+        Message message = messages.get(position);
 
-        String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT)
+        String formattedTime = DateFormat
+                .getTimeInstance(DateFormat.SHORT)
                 .format(new Date(message.getTimestamp()));
 
-        messageTime.setText(formattedTime);
+        if (holder instanceof SentViewHolder) {
+            ((SentViewHolder) holder).messageText.setText(message.getText());
+            ((SentViewHolder) holder).messageTime.setText(formattedTime);
+        } else {
+            ((ReceivedViewHolder) holder).messageText.setText(message.getText());
+            ((ReceivedViewHolder) holder).messageTime.setText(formattedTime);
+        }
+    }
 
-        return convertView;
+    @Override
+    public int getItemCount() {
+        return messages.size();
+    }
+
+    // Sent message holder
+    static class SentViewHolder extends RecyclerView.ViewHolder {
+        TextView messageText, messageTime;
+
+        SentViewHolder(View itemView) {
+            super(itemView);
+            messageText = itemView.findViewById(R.id.messageText);
+            messageTime = itemView.findViewById(R.id.messageTime);
+        }
+    }
+
+    // Received message holder
+    static class ReceivedViewHolder extends RecyclerView.ViewHolder {
+        TextView messageText, messageTime;
+
+        ReceivedViewHolder(View itemView) {
+            super(itemView);
+            messageText = itemView.findViewById(R.id.messageText);
+            messageTime = itemView.findViewById(R.id.messageTime);
+        }
     }
 }
