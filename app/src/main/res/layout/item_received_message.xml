@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/messageText"
+            android:id="@+id/receiverText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hi there"
@@ -28,7 +28,7 @@
             android:textSize="15sp"/>
 
         <TextView
-            android:id="@+id/messageTime"
+            android:id="@+id/receiverTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="12:31 PM"
