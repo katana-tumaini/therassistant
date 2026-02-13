@@ -1,18 +1,22 @@
 package com.example.therassistant2;
 
-public class Message {
-    private String text;
-    private long timestamp;
-    private String senderId;
+public class Message{
+    private String text, textID, Uid;
+    long timestamp;
 
     public Message() {
-        // Default constructor required for calls to DataSnapshot.getValue(Message.class)
+
     }
 
-    public Message(String text, long timestamp, String senderId) {
+    public Message(String text, long timestamp, String Uid){
         this.text = text;
         this.timestamp = timestamp;
-        this.senderId = senderId;
+        this.Uid = Uid;
+    }
+
+    public Message(String text, String Uid){
+        this.text = text;
+        this.Uid = Uid;
     }
 
     public String getText() {
@@ -23,6 +27,22 @@ public class Message {
         this.text = text;
     }
 
+    public String getTextID() {
+        return textID;
+    }
+
+    public void setTextID(String textID) {
+        this.textID = textID;
+    }
+
+    public String getUid() {
+        return Uid;
+    }
+
+    public void setUid(String uid) {
+        Uid = uid;
+    }
+
     public long getTimestamp() {
         return timestamp;
     }
@@ -30,12 +50,5 @@ public class Message {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
 }
+
