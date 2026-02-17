@@ -1,5 +1,6 @@
 package com.example.therassistant2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -34,7 +35,7 @@ public class messaging extends AppCompatActivity {
     private ImageButton backButton;
     private ImageView profileImage;
 
-    private List<Message> messageList;
+    private ArrayList<Message> messageList;
     private messageadapter messageAdapter;
 
     private FirebaseFirestore db;
@@ -64,12 +65,9 @@ public class messaging extends AppCompatActivity {
             return;
         }
 
-        // 🔹 Setup RecyclerView
         messageList = new ArrayList<>();
-        messageAdapter = new messageadapter(
-                messageList,
-                auth.getCurrentUser().getUid()
-        );
+        Context context = this;
+        messageAdapter = new messageadapter(context, messageList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
@@ -77,7 +75,6 @@ public class messaging extends AppCompatActivity {
         messageRecyclerView.setLayoutManager(layoutManager);
         messageRecyclerView.setAdapter(messageAdapter);
 
-        // 🔹 Get chat info
         recipientId = getIntent().getStringExtra("recipientId");
         String recipientName = getIntent().getStringExtra("recipientName");
 
