@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="20dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#F7E6FA">
+
+    <TextView
+        android:id="@+id/dialogDate"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnPickTime"
+        android:text="Pick Time"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RadioGroup
+        android:id="@+id/meetingTypeGroup"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioPhysical"
+            android:text="Physical"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
+        <RadioButton
+            android:id="@+id/radioVirtual"
+            android:text="Virtual"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnConfirmBooking"
+        android:text="Confirm Booking"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
