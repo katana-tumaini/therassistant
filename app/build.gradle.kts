@@ -48,6 +48,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging")
     // implementation("com.google.firebase:firebase-vertexai") // Uncomment this if you are actively using Vertex AI
 
+    implementation ("com.prolificinteractive:material-calendarview:1.4.3")
     // CardStackView (Swipe Deck)
    // implementation("com.yuyakaido.android:cardstackview:2.3.4")
 

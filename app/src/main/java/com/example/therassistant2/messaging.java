@@ -42,7 +42,9 @@ public class messaging extends AppCompatActivity {
     private FirebaseAuth auth;
 
     private String currentChatId;
-    private String recipientId;
+    private String receiverId;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +69,16 @@ public class messaging extends AppCompatActivity {
 
         messageList = new ArrayList<>();
         Context context = this;
-        messageAdapter = new messageadapter(context, messageList);
+        messageAdapter = new messageadapter(messageList, context, receiverId);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager  layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
 
         messageRecyclerView.setLayoutManager(layoutManager);
         messageRecyclerView.setAdapter(messageAdapter);
 
-        recipientId = getIntent().getStringExtra("recipientId");
-        String recipientName = getIntent().getStringExtra("recipientName");
+        receiverId = getIntent().getStringExtra("receiverId");
+        String recipientName = getIntent().getStringExtra("receiverName");
 
         if (recipientName != null)
             chatHeader.setText(recipientName);
@@ -85,12 +87,12 @@ public class messaging extends AppCompatActivity {
 
         profileImage.setOnClickListener(v -> {
             Intent intent = new Intent(messaging.this, TherapistProfile.class);
-            intent.putExtra("therapistId", recipientId);
+            intent.putExtra("therapistId", receiverId);
             startActivity(intent);
         });
 
-        if (recipientId != null && !recipientId.isEmpty())
-            findOrCreateChat(recipientId);
+        if (receiverId != null && !receiverId.isEmpty())
+            findOrCreateChat(receiverId);
         else {
             Toast.makeText(this, "Recipient missing.", Toast.LENGTH_LONG).show();
             finish();

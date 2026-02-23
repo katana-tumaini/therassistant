@@ -17,14 +17,20 @@ public class messageadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     ArrayList<Message> messageList;
     Context context;
-
+    String receiverId;
     int sender_view_type = 1;
     int receiver_view_type = 2;
 
 
-    public messageadapter(Context context, ArrayList<Message> messageList) {
+    public messageadapter(ArrayList<Message> messageList, Context context ) {
         this.context = context;
         this.messageList = messageList;
+    }
+
+    public messageadapter(ArrayList<Message> messageList, Context context, String receiverId) {
+        this.messageList = messageList;
+        this.context = context;
+        this.receiverId = receiverId;
     }
 
     @NonNull
