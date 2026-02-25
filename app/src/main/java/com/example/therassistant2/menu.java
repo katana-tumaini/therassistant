@@ -73,7 +73,7 @@ public class menu extends AppCompatActivity {
     }
 
     private void openCalendarActivity() {
-        Intent intent = new Intent(this, calendar.class);
+        Intent intent = new Intent(this, BookingActivity.class);
         startActivity(intent);
     }
 

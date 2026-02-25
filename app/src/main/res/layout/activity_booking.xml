@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBC8F1"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:clipToPadding="false">
+
 
     <TextView
         android:id="@+id/therapistName"
@@ -14,7 +16,7 @@
         android:text="Dr. Sarah Johnson"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:gravity="center"
         android:padding="12dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,21 +28,33 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="6dp"
-        android:backgroundTint="#FFFFFF"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="8dp"
+        android:backgroundTint="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/therapistName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/materialCalendar"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mcv_showOtherDates="all"
-            app:mcv_selectionMode="single"
-            app:mcv_firstDayOfWeek="monday"
-            android:background="#F7E6FA"/>
+            android:padding="12dp">
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F7E6FA"
+
+                app:mcv_showOtherDates="all"
+                app:mcv_firstDayOfWeek="monday"
+
+                app:mcv_arrowColor="@android:color/black"
+                app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:mcv_weekDayTextAppearance="@style/TextAppearance.AppCompat.Body2"/>
+
+        </FrameLayout>
 
     </androidx.cardview.widget.CardView>
 
@@ -50,8 +64,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="6dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="8dp"
         android:backgroundTint="#F7E6FA"
         app:layout_constraintTop_toBottomOf="@id/calendarCard"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="18dp">
 
             <TextView
                 android:id="@+id/selectedDateText"
@@ -70,12 +84,11 @@
                 android:layout_height="wrap_content"
                 android:text="Select a date to see availability"
                 android:textSize="16sp"
-                android:textColor="#333"/>
+                android:textColor="#333333" />
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/bookNow"
         android:layout_width="wrap_content"
@@ -88,4 +101,6 @@
         android:clickable="true"
         android:focusable="true" />
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
