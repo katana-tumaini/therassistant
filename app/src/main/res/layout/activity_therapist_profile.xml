@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- profile -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,7 +59,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- details -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,8 +124,25 @@
 
             </LinearLayout>
 
+
         </androidx.cardview.widget.CardView>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/messageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="Book Now"
+            android:textColor="@android:color/black"
+            android:contentDescription="Book Now"
+            app:icon="@drawable/baseline_add_24"
+            app:iconTint="@android:color/black"
+            app:backgroundTint="#F1D9F8"/>
+
 
     </LinearLayout>
+
+
 
 </ScrollView>
