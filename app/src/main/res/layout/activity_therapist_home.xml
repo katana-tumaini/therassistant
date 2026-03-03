@@ -99,7 +99,7 @@
                 android:id="@+id/BookingRequests"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/baseline_edit_calendar_24"
+                android:src="@drawable/baseline_checklist_rtl_24"
                 android:contentDescription="Booking Requests"
                 android:clickable="true"
                 android:focusable="true" />
@@ -108,7 +108,7 @@
                 android:id="@+id/calendarLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calendar"
+                android:text="Booking Requests"
                 android:textSize="18sp"
                 android:layout_marginStart="16dp"
                 android:layout_gravity="center_vertical" />
