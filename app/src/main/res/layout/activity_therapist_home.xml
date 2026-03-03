@@ -7,7 +7,6 @@
     android:background="#EBC8F1"
     tools:context=".TherapistHome">
 
-    <!-- Top Bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="0dp"
@@ -97,11 +96,11 @@
             android:padding="16dp">
 
             <ImageButton
-                android:id="@+id/calendarButton"
+                android:id="@+id/BookingRequests"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/baseline_edit_calendar_24"
-                android:contentDescription="Calendar"
+                android:contentDescription="Booking Requests"
                 android:clickable="true"
                 android:focusable="true" />
 
