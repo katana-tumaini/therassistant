@@ -1,7 +1,6 @@
 package com.example.therassistant2;
 
 public class Session {
-    private String title;
     private String date;
     private String time;
     private String details;
@@ -15,7 +14,7 @@ public class Session {
     public Session() {
     }
 
-    public Session(String title, String date, String time, String details, String clientEmail, String clientFirstName, String clientLastName, String therapistName, String therapistEmail) {
+    public Session(String date, String time, String details, String clientEmail, String clientFirstName, String clientLastName, String therapistName, String therapistEmail) {
         this.date = date;
         this.time = time;
         this.details = details;

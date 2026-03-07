@@ -44,6 +44,7 @@
         <activity android:name=".menu" android:exported="true" />
         <activity android:name=".Signup" android:exported="true" />
         <activity android:name=".BookingActivity" android:exported="true" />
+        <activity android:name=".BookingRequests" android:exported="true" />
 
 
 
