@@ -1,9 +1,13 @@
 package com.example.therassistant2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +17,7 @@ public class TherapistProfile extends AppCompatActivity {
 
     private ImageView profileImageView;
     private TextView nameTextView, typeTextView, contactInfoTextView, availabilityTextView, phoneNumberTextView;
-
+    private ExtendedFloatingActionButton bookNow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +31,18 @@ public class TherapistProfile extends AppCompatActivity {
         availabilityTextView = findViewById(R.id.availabilityTextView);
         phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
 
+        bookNow = findViewById(R.id.bookNow);
+
+
         Therapist therapist = (Therapist) getIntent().getSerializableExtra("therapist");
+
+        bookNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TherapistProfile.this, BookingActivity.class);
+                startActivity(intent);
+            }
+        });
 
         if (therapist != null) {
 

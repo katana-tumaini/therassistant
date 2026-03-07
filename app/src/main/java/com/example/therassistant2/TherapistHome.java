@@ -11,7 +11,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class TherapistHome extends AppCompatActivity {
 
-    private ImageButton clientsButton, calendarButton, addSessionButton, upcomingSessionsButton;
+    private ImageButton clientsButton, BookingRequests, addSessionButton, upcomingSessionsButton;
     private ImageView profileCircle;
 
     @Override
@@ -20,7 +20,7 @@ public class TherapistHome extends AppCompatActivity {
         setContentView(R.layout.activity_therapist_home);
 
         clientsButton = findViewById(R.id.clientsButton);
-        calendarButton = findViewById(R.id.calendarButton);
+        BookingRequests = findViewById(R.id.BookingRequests);
         addSessionButton = findViewById(R.id.addSessionButton);
         upcomingSessionsButton = findViewById(R.id.upcomingSessionsButton);
         profileCircle = findViewById(R.id.profileCircle);
@@ -33,10 +33,10 @@ public class TherapistHome extends AppCompatActivity {
             }
         });
 
-        calendarButton.setOnClickListener(new View.OnClickListener() {
+        BookingRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TherapistHome.this, calendar.class);
+                Intent intent = new Intent(TherapistHome.this, BookingActivity.class);
                 startActivity(intent);
             }
         });
