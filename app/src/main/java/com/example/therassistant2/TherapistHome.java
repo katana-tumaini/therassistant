@@ -19,10 +19,10 @@ public class TherapistHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_therapist_home);
 
-        clientsButton = findViewById(R.id.clientsButton);
-        BookingRequests = findViewById(R.id.BookingRequests);
-        addSessionButton = findViewById(R.id.addSessionButton);
-        upcomingSessionsButton = findViewById(R.id.upcomingSessionsButton);
+        clientsButton = findViewById(R.id.clientsCard);
+        BookingRequests = findViewById(R.id.bookingRequestsCard);
+        addSessionButton = findViewById(R.id.addSessionCard);
+        upcomingSessionsButton = findViewById(R.id.upcomingSessionsCard);
         profileCircle = findViewById(R.id.profileCircle);
 
         clientsButton.setOnClickListener(new View.OnClickListener() {
