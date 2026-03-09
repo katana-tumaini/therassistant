@@ -34,7 +34,7 @@ import java.util.Map;
 public class BookingActivity extends AppCompatActivity {
 
     private MaterialCalendarView calendarView;
-    private TextView availabilityText;
+    private TextView availabilityText, therapistNameHeader;
     private FloatingActionButton bookNow;
 
     private FirebaseFirestore db;
@@ -57,6 +57,7 @@ public class BookingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking);
 
         calendarView = findViewById(R.id.calendarView);
+        therapistNameHeader = findViewById(R.id.therapistNameHeader);
         availabilityText = findViewById(R.id.selectedDateText);
         bookNow = findViewById(R.id.bookNow);
 
@@ -64,13 +65,21 @@ public class BookingActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         therapistId = getIntent().getStringExtra("therapistId");
+        String therapistName = getIntent().getStringExtra("therapist");
+        String availability = getIntent().getStringExtra("availability");
 
-        availabilityText.setText("Available: 9:00 AM - 5:00 PM");
+        if (therapistName != null) {
+            therapistNameHeader.setText(therapistName);
+        }
 
-        calendarView.setOnDateChangedListener((widget, date, selected) -> {
+        if (availability != null) {
+            availabilityText.setText("Available: " + availability);
+        }
+
+            calendarView.setOnDateChangedListener((widget, date, selected) -> {
             selectedDate = date;
-            availabilityText.setText("Available: 9:00 AM - 5:00 PM\nSelected: "
-                    + formatDate(date));
+            availabilityText.setText("Available: " + availability +
+                        "\nSelected: " + formatDate(date));
         });
 
         bookNow.setOnClickListener(v -> {

@@ -40,6 +40,11 @@ public class TherapistProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TherapistProfile.this, BookingActivity.class);
+
+                intent.putExtra("therapistId", therapist.getUid());
+                intent.putExtra("therapist", therapist.getName());
+                intent.putExtra("availability", therapist.getAvailability());
+
                 startActivity(intent);
             }
         });

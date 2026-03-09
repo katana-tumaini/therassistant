@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/therapistName"
+        android:id="@+id/therapistNameHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Dr. Sarah Johnson"
@@ -31,7 +31,7 @@
         app:cardCornerRadius="18dp"
         app:cardElevation="8dp"
         android:backgroundTint="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/therapistName"
+        app:layout_constraintTop_toBottomOf="@id/therapistNameHeader"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
