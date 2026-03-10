@@ -7,11 +7,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class TherapistHome extends AppCompatActivity {
 
-    private ImageButton clientsButton, BookingRequests, addSessionButton, upcomingSessionsButton;
+    private CardView clientsButton, BookingRequests, addSessionButton, upcomingSessionsButton;
     private ImageView profileCircle;
 
     @Override
@@ -36,7 +38,7 @@ public class TherapistHome extends AppCompatActivity {
         BookingRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TherapistHome.this, BookingActivity.class);
+                Intent intent = new Intent(TherapistHome.this, BookingRequests.class);
                 startActivity(intent);
             }
         });

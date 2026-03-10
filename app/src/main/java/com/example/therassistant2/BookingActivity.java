@@ -65,7 +65,7 @@ public class BookingActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         therapistId = getIntent().getStringExtra("therapistId");
-        String therapistName = getIntent().getStringExtra("therapist");
+        String therapistName = getIntent().getStringExtra("therapistName");
         String availability = getIntent().getStringExtra("availability");
 
         if (therapistName != null) {
@@ -98,7 +98,7 @@ public class BookingActivity extends AppCompatActivity {
     // Load all bookings and color calendar
     private void loadAllBookings() {
 
-        db.collection("bookings")
+        db.collection("bookingRequests")
                 .whereEqualTo("therapistId", therapistId)
                 .get()
                 .addOnSuccessListener(query -> {
@@ -223,23 +223,29 @@ public class BookingActivity extends AppCompatActivity {
         }
 
         Map<String, Object> booking = new HashMap<>();
+
         booking.put("therapistId", therapistId);
-        booking.put("userId", auth.getCurrentUser().getUid());
+        booking.put("clientId", auth.getCurrentUser().getUid());
         booking.put("date", date);
         booking.put("time", time);
         booking.put("meetingType", meetingType);
+        booking.put("status", "pending");
         booking.put("timestamp", System.currentTimeMillis());
 
-        db.collection("bookings")
+        db.collection("bookingRequests")
                 .add(booking)
                 .addOnSuccessListener(doc -> {
 
                     Toast.makeText(this,
-                            "Session booked!",
+                            "Booking request sent!",
                             Toast.LENGTH_SHORT).show();
 
                     loadAllBookings();
-                });
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this,
+                                "Failed to send request",
+                                Toast.LENGTH_SHORT).show());
     }
 
     private String formatDate(CalendarDay date) {
