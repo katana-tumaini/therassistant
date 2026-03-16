@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,6 +21,7 @@ public class BookingRequests extends AppCompatActivity {
     private List<ModelBookingRequests> requestList;
 
     private FirebaseFirestore db;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +38,17 @@ public class BookingRequests extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+        auth = FirebaseAuth.getInstance();
+
         loadRequests();
     }
 
     private void loadRequests() {
 
+        String therapistId = auth.getCurrentUser().getUid();
+
         db.collection("bookingRequests")
+                .whereEqualTo("therapistId", therapistId)
                 .whereEqualTo("status", "pending")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -51,12 +58,18 @@ public class BookingRequests extends AppCompatActivity {
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
 
                         ModelBookingRequests request = doc.toObject(ModelBookingRequests.class);
-                        request.setRequestId(doc.getId());
 
-                        requestList.add(request);
+                        if (request != null) {
+                            request.setRequestId(doc.getId());
+                            requestList.add(request);
+                        }
                     }
 
                     adapter.notifyDataSetChanged();
-                });
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this,
+                                "Failed to load requests",
+                                Toast.LENGTH_SHORT).show());
     }
 }
