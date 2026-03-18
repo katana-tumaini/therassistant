@@ -3,6 +3,7 @@ package com.example.therassistant2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,12 +18,12 @@ import java.util.Calendar;
 
 public class menu extends AppCompatActivity {
 
-    private ImageView profileCircle;
+    private ImageView profileCircle, notificationBell;
     private LinearLayout therapistsButton;
     private LinearLayout calendarButton;
     private LinearLayout upcomingSessionsButton;
     private FloatingActionButton messageButton;
-    private TextView welcomeText;
+    private TextView welcomeText, notificationBadge;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
@@ -38,6 +39,9 @@ public class menu extends AppCompatActivity {
         upcomingSessionsButton = findViewById(R.id.upcomingSessionsButton);
         messageButton = findViewById(R.id.messageButton);
         welcomeText = findViewById(R.id.welcomeText);
+        notificationBell = findViewById(R.id.notificationBell);
+        notificationBadge = findViewById(R.id.notificationBadge);
+
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -48,9 +52,37 @@ public class menu extends AppCompatActivity {
         calendarButton.setOnClickListener(v -> openCalendarActivity());
         upcomingSessionsButton.setOnClickListener(v -> openUpcomingSessionsActivity());
         messageButton.setOnClickListener(v -> openMessagesActivity());
+        notificationBell.setOnClickListener(v -> openNotificationsActivity());
 
     }
 
+    private void loadNotificationCount() {
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseFirestore.getInstance()
+                .collection("notifications")
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("read", false)
+                .get()
+                .addOnSuccessListener(query -> {
+
+                    int count = query.size();
+
+                    if (count > 0) {
+                        notificationBadge.setText(count > 9 ? "9+" : String.valueOf(count));
+                        notificationBadge.setVisibility(View.VISIBLE);
+                    } else {
+                        notificationBadge.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadNotificationCount();
+    }
     private void showProfileOptions() {
         String[] options = {"Settings", "Logout"};
         new AlertDialog.Builder(this)
@@ -66,7 +98,10 @@ public class menu extends AppCompatActivity {
                 })
                 .show();
     }
-
+    private void openNotificationsActivity() {
+        Intent intent = new Intent(this, NotificationsActivity.class);
+        startActivity(intent);
+    }
     private void openTherapistsActivity() {
         Intent intent = new Intent(this, therapists.class);
         startActivity(intent);

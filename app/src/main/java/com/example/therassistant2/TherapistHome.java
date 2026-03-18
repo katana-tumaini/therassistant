@@ -5,16 +5,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TherapistHome extends AppCompatActivity {
 
     private CardView clientsButton, BookingRequests, addSessionButton, upcomingSessionsButton;
-    private ImageView profileCircle;
+    private ImageView profileCircle, notificationBell;
+    private TextView notificationBadge;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,10 @@ public class TherapistHome extends AppCompatActivity {
         addSessionButton = findViewById(R.id.addSessionCard);
         upcomingSessionsButton = findViewById(R.id.upcomingSessionsCard);
         profileCircle = findViewById(R.id.profileCircle);
+        notificationBell = findViewById(R.id.notificationBell);
+        notificationBadge = findViewById(R.id.notificationBadge);
+
+
 
         clientsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +86,33 @@ public class TherapistHome extends AppCompatActivity {
         });
     }
 
+    private void loadNotificationCount() {
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseFirestore.getInstance()
+                .collection("notifications")
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("read", false)
+                .get()
+                .addOnSuccessListener(query -> {
+
+                    int count = query.size();
+
+                    if (count > 0) {
+                        notificationBadge.setText(count > 9 ? "9+" : String.valueOf(count));
+                        notificationBadge.setVisibility(View.VISIBLE);
+                    } else {
+                        notificationBadge.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadNotificationCount();
+    }
     private void showProfileOptions() {
         String[] options = {"Settings", "Logout"};
         new AlertDialog.Builder(this)

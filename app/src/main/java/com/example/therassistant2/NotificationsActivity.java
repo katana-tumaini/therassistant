@@ -53,6 +53,10 @@ public class NotificationsActivity extends AppCompatActivity {
                     notificationList.clear();
 
                     for (DocumentSnapshot doc : query.getDocuments()) {
+                        doc.getReference().update("read", true);
+                    }
+
+                    for (DocumentSnapshot doc : query.getDocuments()) {
 
                         ModelNotification notification =
                                 doc.toObject(ModelNotification.class);
@@ -63,4 +67,5 @@ public class NotificationsActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 });
     }
+
 }
