@@ -12,15 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Background image -->
+        <!-- Profile image -->
         <ImageView
             android:id="@+id/therapist_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/baseline_account_circle_24" />
+            android:scaleType="centerCrop" />
 
-        <!-- Scrim overlay ON TOP of image -->
+        <!-- Scrim overlay for text contrast -->
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,30 +31,34 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp"
+            android:background="@drawable/rounded_bottom_overlay">
 
-                <TextView
-                    android:id="@+id/therapist_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/therapist_name"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-
+            <TextView
+                android:id="@+id/therapist_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:shadowColor="#80000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2" />
 
             <TextView
                 android:id="@+id/therapist_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="Therapist Type"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="18sp"
+                android:shadowColor="#80000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2" />
         </LinearLayout>
 
     </FrameLayout>

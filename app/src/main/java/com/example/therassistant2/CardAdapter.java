@@ -53,32 +53,37 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         if (TextUtils.isEmpty(fullName)) fullName = therapist.getName();
         if (TextUtils.isEmpty(fullName)) fullName = "Therapist";
 
-       /* String age = therapist.getAge();
+        String age = therapist.getAge();
         if (!TextUtils.isEmpty(age)) {
             holder.txtNameAge.setText(fullName + ", " + age);
         } else {
             holder.txtNameAge.setText(fullName);
-        }*/
+        }
 
         String type = therapist.gettherapisttype();
         if (TextUtils.isEmpty(type)) type = "Therapist";
         holder.txtTherapistType.setText(type);
 
         String imageUrl = therapist.getProfileImageUrl();
-        Glide.with(context)
-                .load(imageUrl)
-                .placeholder(android.R.color.darker_gray)
-                .error(android.R.color.darker_gray)
-                .into(holder.imgProfile);
+        if (!TextUtils.isEmpty(imageUrl)) {
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.default_profile_placeholder)
+                    .error(R.drawable.default_profile_placeholder)
+                    .centerCrop()
+                    .into(holder.imgProfile);
+        } else {
+            holder.imgProfile.setImageResource(R.drawable.default_profile_placeholder);
+        }
 
-        // STACK EFFECT
-        float scale = 1 - (position * 0.08f);
-        float translationY = position * 60f;
+        // IMPROVED STACK EFFECT
+        float scale = 1 - (position * 0.05f);
+        float translationY = position * 40f;
 
         holder.itemView.setScaleX(scale);
         holder.itemView.setScaleY(scale);
         holder.itemView.setTranslationY(translationY);
-        holder.itemView.setAlpha(1 - (position * 0.10f));
+        holder.itemView.setAlpha(1 - (position * 0.15f));
 
         // TAP CARD → OPEN TherapistProfile
         holder.itemView.setOnClickListener(v -> {

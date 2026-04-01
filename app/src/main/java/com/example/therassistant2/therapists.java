@@ -57,16 +57,30 @@ public class therapists extends AppCompatActivity {
 
             @Override
             public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+                if (getItemCount() == 0) {
+                    detachAndScrapAttachedViews(recycler);
+                    return;
+                }
+                
                 detachAndScrapAttachedViews(recycler);
 
                 int itemCount = Math.min(getItemCount(), 3);
+                int width = getWidth();
+                int height = getHeight();
 
                 for (int i = itemCount - 1; i >= 0; i--) {
                     View view = recycler.getViewForPosition(i);
                     addView(view);
 
                     measureChildWithMargins(view, 0, 0);
-                    layoutDecorated(view, 0, 0, getWidth(), getHeight());
+                    
+                    // Center the cards with proper margins
+                    int left = (width - getDecoratedMeasuredWidth(view)) / 2;
+                    int top = (height - getDecoratedMeasuredHeight(view)) / 2;
+                    
+                    layoutDecorated(view, left, top, 
+                            left + getDecoratedMeasuredWidth(view), 
+                            top + getDecoratedMeasuredHeight(view));
                 }
             }
         });
@@ -79,7 +93,7 @@ public class therapists extends AppCompatActivity {
         loadTherapistsFromFirebase();
         attachItemTouchHelper();
     }
-
+    
     private void loadTherapistsFromFirebase() {
         therapistsRef.addValueEventListener(new ValueEventListener() {
             @Override
