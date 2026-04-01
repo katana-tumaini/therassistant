@@ -1,35 +1,66 @@
 package com.example.therassistant2;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TherapistSignup extends AppCompatActivity {
-    EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextTherapistType, editTextAvailability, editTextPhoneNumber;
-    Button buttonSignup;
-    DatabaseReference databaseReference;
+
+    EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword,
+            editTextConfirmPassword, editTextTherapistType, editTextAvailability, editTextPhoneNumber;
+
+    Button buttonSignup, buttonUploadPhoto;
+    ImageView imageProfile;
+
     FirebaseAuth mAuth;
+    DatabaseReference databaseReference;
+    StorageReference storageReference;
+
+    private Uri imageUri;
+    private String uploadedImageUrl = "";
+
+
+    private final ActivityResultLauncher<Intent> imagePickerLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                            imageUri = result.getData().getData();
+                            imageProfile.setImageURI(imageUri);
+                        }
+                    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_therapist_signup);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        
         mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        storageReference = FirebaseStorage.getInstance().getReference("profile_images");
+
+        
+        imageProfile = findViewById(R.id.imageProfile);
+        buttonUploadPhoto = findViewById(R.id.buttonUploadPhoto);
 
         editTextFirstName = findViewById(R.id.editTextFirstName);
         editTextLastName = findViewById(R.id.editTextLastName);
@@ -41,73 +72,112 @@ public class TherapistSignup extends AppCompatActivity {
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         buttonSignup = findViewById(R.id.buttonSignup);
 
-        buttonSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String firstName = editTextFirstName.getText().toString().trim();
-                String lastName = editTextLastName.getText().toString().trim();
-                String email = editTextEmail.getText().toString().trim();
-                String password = editTextPassword.getText().toString().trim();
-                String confirmPassword = editTextConfirmPassword.getText().toString().trim();
-                String therapistType = editTextTherapistType.getText().toString().trim();
-                String availability = editTextAvailability.getText().toString().trim();
-                String phoneNumber = editTextPhoneNumber.getText().toString().trim();
+        
+        buttonUploadPhoto.setOnClickListener(v -> openFileChooser());
 
-                if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || therapistType.isEmpty() || availability.isEmpty() || phoneNumber.isEmpty()) {
-                    Toast.makeText(TherapistSignup.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+    
+        buttonSignup.setOnClickListener(v -> signupUser());
+    }
 
-                if (!password.equals(confirmPassword)) {
-                    Toast.makeText(TherapistSignup.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+    private void openFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        imagePickerLauncher.launch(intent);
+    }
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(TherapistSignup.this, task -> {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null) {
-                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                            .setDisplayName(firstName + " " + lastName)
-                                            .build();
-                                    user.updateProfile(profileUpdates).addOnCompleteListener(profileUpdateTask -> {
-                                        if (profileUpdateTask.isSuccessful()) {
-                                            Map<String, Object> therapist = new HashMap<>();
-                                            therapist.put("firstName", firstName);
-                                            therapist.put("lastName", lastName);
-                                            therapist.put("email", email);
-                                            therapist.put("therapistType", therapistType);
-                                            therapist.put("availability", availability);
-                                            therapist.put("phoneNumber", phoneNumber);
+    private void signupUser() {
 
-                                            databaseReference.child("therapists").child(user.getUid())
-                                                    .setValue(therapist)
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        Toast.makeText(TherapistSignup.this, "Signup successful", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(TherapistSignup.this, TherapistHome.class);
-                                                        intent.putExtra("firstName", firstName);
-                                                        intent.putExtra("lastName", lastName);
-                                                        intent.putExtra("email", email);
-                                                        intent.putExtra("therapistType", therapistType);
-                                                        intent.putExtra("availability", availability);
-                                                        intent.putExtra("phoneNumber", phoneNumber);
-                                                        startActivity(intent);
-                                                        finish();
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Toast.makeText(TherapistSignup.this, "Signup failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    });
-                                        } else {
-                                            Toast.makeText(TherapistSignup.this, "Profile update failed: " + profileUpdateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            } else {
-                                Toast.makeText(TherapistSignup.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
+        String firstName = editTextFirstName.getText().toString().trim();
+        String lastName = editTextLastName.getText().toString().trim();
+        String email = editTextEmail.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+        String confirmPassword = editTextConfirmPassword.getText().toString().trim();
+        String therapistType = editTextTherapistType.getText().toString().trim();
+        String availability = editTextAvailability.getText().toString().trim();
+        String phoneNumber = editTextPhoneNumber.getText().toString().trim();
+
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() ||
+                password.isEmpty() || confirmPassword.isEmpty() ||
+                therapistType.isEmpty() || availability.isEmpty() || phoneNumber.isEmpty()) {
+
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+    
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener(authResult -> {
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    if (user == null) return;
+
+                    if (imageUri != null) {
+                        uploadImageAndSaveUser(user, firstName, lastName, email,
+                                therapistType, availability, phoneNumber);
+                    } else {
+                        saveUserToDatabase(user, firstName, lastName, email,
+                                therapistType, availability, phoneNumber, "");
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Signup failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void uploadImageAndSaveUser(FirebaseUser user,
+                                        String firstName, String lastName, String email,
+                                        String therapistType, String availability, String phoneNumber) {
+
+        StorageReference fileRef = storageReference.child(System.currentTimeMillis() + ".jpg");
+
+        fileRef.putFile(imageUri)
+                .continueWithTask(task -> fileRef.getDownloadUrl())
+                .addOnSuccessListener(uri -> {
+
+                    uploadedImageUrl = uri.toString();
+
+                    saveUserToDatabase(user, firstName, lastName, email,
+                            therapistType, availability, phoneNumber, uploadedImageUrl);
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show());
+    }
+
+    private void saveUserToDatabase(FirebaseUser user,
+                                   String firstName, String lastName, String email,
+                                   String therapistType, String availability,
+                                   String phoneNumber, String profileImageUrl) {
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(firstName + " " + lastName)
+                .build();
+
+        user.updateProfile(profileUpdates);
+
+        Map<String, Object> therapist = new HashMap<>();
+        therapist.put("firstName", firstName);
+        therapist.put("lastName", lastName);
+        therapist.put("email", email);
+        therapist.put("therapistType", therapistType);
+        therapist.put("availability", availability);
+        therapist.put("phoneNumber", phoneNumber);
+        therapist.put("profileImageUrl", profileImageUrl);
+
+        databaseReference.child("therapists").child(user.getUid())
+                .setValue(therapist)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Signup successful", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(this, TherapistHome.class);
+                    intent.putExtra("profileImageUrl", profileImageUrl);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Database error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }
