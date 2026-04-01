@@ -41,8 +41,19 @@ public class TherapistProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TherapistProfile.this, BookingActivity.class);
 
+                // Use the same full name logic as displayed in profile
+                String fullName = "";
+                if (!TextUtils.isEmpty(therapist.getFirstName()) || !TextUtils.isEmpty(therapist.getLastName())) {
+                    fullName = (therapist.getFirstName() == null ? "" : therapist.getFirstName()) +
+                            " " +
+                            (therapist.getLastName() == null ? "" : therapist.getLastName());
+                    fullName = fullName.trim();
+                }
+                if (TextUtils.isEmpty(fullName)) fullName = therapist.getName();
+                if (TextUtils.isEmpty(fullName)) fullName = "Therapist";
+
                 intent.putExtra("therapistId", therapist.getUid());
-                intent.putExtra("therapist", therapist.getName());
+                intent.putExtra("therapistName", fullName);
                 intent.putExtra("availability", therapist.getAvailability());
 
                 startActivity(intent);
