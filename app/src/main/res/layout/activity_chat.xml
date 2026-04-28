@@ -57,8 +57,8 @@
         android:id="@+id/messageRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/messageInputContainer"
-        android:layout_above="@+id/topBar"
+        android:layout_below="@id/topBar"
+        android:layout_above="@+id/messageInputContainer"
         android:padding="12dp"/>
 
 

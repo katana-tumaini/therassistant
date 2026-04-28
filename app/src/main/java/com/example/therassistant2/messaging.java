@@ -67,6 +67,10 @@ public class messaging extends AppCompatActivity {
             return;
         }
 
+        // Extract receiverId before initializing adapter
+        receiverId = getIntent().getStringExtra("receiverId");
+        String recipientName = getIntent().getStringExtra("receiverName");
+
         messageList = new ArrayList<>();
         Context context = this;
         messageAdapter = new messageadapter(messageList, context, receiverId);
@@ -76,9 +80,6 @@ public class messaging extends AppCompatActivity {
 
         messageRecyclerView.setLayoutManager(layoutManager);
         messageRecyclerView.setAdapter(messageAdapter);
-
-        receiverId = getIntent().getStringExtra("receiverId");
-        String recipientName = getIntent().getStringExtra("receiverName");
 
         if (recipientName != null)
             chatHeader.setText(recipientName);
@@ -92,7 +93,7 @@ public class messaging extends AppCompatActivity {
         });
 
         if (receiverId != null && !receiverId.isEmpty())
-            findOrCreateChat(receiverId);
+            checkForExistingChat(receiverId);
         else {
             Toast.makeText(this, "Recipient missing.", Toast.LENGTH_LONG).show();
             finish();
@@ -100,9 +101,53 @@ public class messaging extends AppCompatActivity {
 
         sendButton.setOnClickListener(v -> {
             String text = messageInput.getText().toString().trim();
-            if (!text.isEmpty() && currentChatId != null)
-                sendMessage(text);
+            if (!text.isEmpty()) {
+                if (currentChatId == null) {
+                    createChatAndSendMessage(text, receiverId);
+                } else {
+                    sendMessage(text);
+                }
+            }
         });
+    }
+
+    private void checkForExistingChat(String recipientId) {
+        String currentUserId = auth.getCurrentUser().getUid();
+        String chatId = currentUserId.compareTo(recipientId) > 0
+                ? currentUserId + "_" + recipientId
+                : recipientId + "_" + currentUserId;
+
+        DocumentReference chatRef = db.collection("chats").document(chatId);
+        
+        chatRef.get().addOnSuccessListener(doc -> {
+            if (doc.exists()) {
+                currentChatId = chatId;
+                loadMessages(chatId);
+            }
+            // If chat doesn't exist, don't create it - wait for first message
+        }).addOnFailureListener(e ->
+                Toast.makeText(this, "Chat check error", Toast.LENGTH_SHORT).show());
+    }
+
+    private void createChatAndSendMessage(String messageText, String recipientId) {
+        String currentUserId = auth.getCurrentUser().getUid();
+        String chatId = currentUserId.compareTo(recipientId) > 0
+                ? currentUserId + "_" + recipientId
+                : recipientId + "_" + currentUserId;
+
+        DocumentReference chatRef = db.collection("chats").document(chatId);
+        
+        Map<String, Object> chatData = new HashMap<>();
+        chatData.put("participants", Arrays.asList(currentUserId, recipientId));
+        chatData.put("createdAt", System.currentTimeMillis());
+        chatData.put("createdBy", currentUserId); // Track who created the chat
+
+        chatRef.set(chatData).addOnSuccessListener(aVoid -> {
+            currentChatId = chatId;
+            loadMessages(chatId);
+            sendMessage(messageText);
+        }).addOnFailureListener(e ->
+                Toast.makeText(this, "Failed to create chat", Toast.LENGTH_SHORT).show());
     }
 
     private void findOrCreateChat(String recipientId) {
@@ -144,21 +189,27 @@ public class messaging extends AppCompatActivity {
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .addSnapshotListener((value, error) -> {
 
-                    if (error != null || value == null)
+                    if (error != null || value == null) {
+                        Toast.makeText(this, "Error loading messages: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                         return;
+                    }
 
                     messageList.clear();
 
                     for (QueryDocumentSnapshot doc : value) {
                         Message msg = doc.toObject(Message.class);
-                        messageList.add(msg);
+                        // Ensure the message has all required fields
+                        if (msg.getText() != null && msg.getUid() != null) {
+                            messageList.add(msg);
+                        }
                     }
 
                     messageAdapter.notifyDataSetChanged();
 
-                    // Scroll to latest message
-                    messageRecyclerView.scrollToPosition(
-                            messageList.size() - 1);
+                    // Scroll to latest message if there are messages
+                    if (messageList.size() > 0) {
+                        messageRecyclerView.scrollToPosition(messageList.size() - 1);
+                    }
                 });
     }
 
@@ -174,11 +225,24 @@ public class messaging extends AppCompatActivity {
                 .document(currentChatId)
                 .collection("messages")
                 .add(message)
-                .addOnSuccessListener(doc ->
-                        messageInput.setText(""))
+                .addOnSuccessListener(doc -> {
+                    messageInput.setText("");
+                    
+                    // Update chat document with last message info
+                    updateChatLastMessage(text, System.currentTimeMillis());
+                })
                 .addOnFailureListener(e ->
                         Toast.makeText(this,
                                 "Message failed",
                                 Toast.LENGTH_SHORT).show());
+    }
+
+    private void updateChatLastMessage(String lastMessage, long timestamp) {
+        db.collection("chats")
+                .document(currentChatId)
+                .update("lastMessage", lastMessage, "lastTimestamp", timestamp)
+                .addOnFailureListener(e -> {
+                    // Silent fail - chat list update is not critical
+                });
     }
 }

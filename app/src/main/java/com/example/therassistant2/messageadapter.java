@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class messageadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -60,10 +63,18 @@ public class messageadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Message message = messageList.get(position);
         if(holder.getClass() == SenderViewHolder.class){
             ((SenderViewHolder)holder).senderText.setText(message.getText());
+            // Set timestamp for sent message
+            if (message.getTimestamp() > 0) {
+                ((SenderViewHolder)holder).senderTime.setText(formatTimestamp(message.getTimestamp()));
+            }
 
         }
         else{
             ((ReceiverViewHolder)holder).receiverText.setText(message.getText());
+            // Set timestamp for received message
+            if (message.getTimestamp() > 0) {
+                ((ReceiverViewHolder)holder).receiverTime.setText(formatTimestamp(message.getTimestamp()));
+            }
         }
 
     }
@@ -90,6 +101,16 @@ public class messageadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             senderText = itemView.findViewById(R.id.senderText);
             senderTime = itemView.findViewById(R.id.senderTime);
+        }
+    }
+
+    // Helper method to format timestamp into readable time
+    private String formatTimestamp(long timestamp) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.getDefault());
+            return sdf.format(new Date(timestamp));
+        } catch (Exception e) {
+            return "";
         }
     }
 

@@ -178,8 +178,8 @@ public class therapists extends AppCompatActivity {
         Intent intent = new Intent(therapists.this, messaging.class);
 
         // These match what your old code used:
-        intent.putExtra("recipientId", therapist.getUid());
-        intent.putExtra("recipientName", therapist.getFirstName() + " " + therapist.getLastName());
+        intent.putExtra("receiverId", therapist.getUid());
+        intent.putExtra("receiverName", therapist.getFirstName() + " " + therapist.getLastName());
 
         // Extra useful data if you want:
         intent.putExtra("therapistType", therapist.gettherapisttype());

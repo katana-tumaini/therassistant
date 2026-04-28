@@ -114,24 +114,44 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     private void fetchUserDetailsAndAddChat(String chatId, String otherUserId, String lastMsg, long lastTs) {
-        db.collection("users").document(otherUserId).get()
+        // Try therapists collection first, then fallback to users
+        db.collection("therapists").document(otherUserId).get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    if (!documentSnapshot.exists()) return;
+                    if (documentSnapshot.exists()) {
+                        // Found in therapists collection
+                        String firstName = documentSnapshot.getString("firstName");
+                        String lastName = documentSnapshot.getString("lastName");
 
-                    String firstName = documentSnapshot.getString("firstName");
-                    String lastName = documentSnapshot.getString("lastName");
+                        if (firstName == null) firstName = "";
+                        if (lastName == null) lastName = "";
 
-                    if (firstName == null) firstName = "";
-                    if (lastName == null) lastName = "";
+                        Chat chat = new Chat(chatId, firstName, lastName, lastMsg, lastTs);
+                        addChatToList(chat);
+                    } else {
+                        // Try users collection as fallback
+                        db.collection("users").document(otherUserId).get()
+                                .addOnSuccessListener(userDoc -> {
+                                    if (userDoc.exists()) {
+                                        String firstName = userDoc.getString("firstName");
+                                        String lastName = userDoc.getString("lastName");
 
-                    Chat chat = new Chat(chatId, firstName, lastName, lastMsg, lastTs);
+                                        if (firstName == null) firstName = "";
+                                        if (lastName == null) lastName = "";
 
-                    chatList.add(chat);
-
-                    // Sort newest -> oldest
-                    Collections.sort(chatList, (a, b) -> Long.compare(b.getLastTimestamp(), a.getLastTimestamp()));
-
-                    chatAdapter.notifyDataSetChanged();
+                                        Chat chat = new Chat(chatId, firstName, lastName, lastMsg, lastTs);
+                                        addChatToList(chat);
+                                    }
+                                });
+                    }
                 });
+    }
+
+    private void addChatToList(Chat chat) {
+        chatList.add(chat);
+
+        // Sort newest -> oldest
+        Collections.sort(chatList, (a, b) -> Long.compare(b.getLastTimestamp(), a.getLastTimestamp()));
+
+        chatAdapter.notifyDataSetChanged();
     }
 }

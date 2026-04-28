@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
@@ -43,9 +45,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, messaging.class);
             intent.putExtra("chatId", chat.getChatId());
+            
+            // Extract receiverId from participants (the other user)
+            String receiverId = null;
+            List<String> participants = chat.getParticipants();
+            if (participants != null && participants.size() == 2) {
+                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                receiverId = participants.get(0).equals(currentUserId) ? participants.get(1) : participants.get(0);
+            }
 
-            // Optional but recommended if your messaging needs it
-            intent.putExtra("recipientName", name);
+            // Pass required extras for messaging
+            intent.putExtra("receiverId", receiverId);
+            intent.putExtra("receiverName", name);
 
             context.startActivity(intent);
         });
