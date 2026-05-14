@@ -26,6 +26,8 @@
 
             <TextView
                 android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Richard Omollo"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -33,6 +35,8 @@
 
             <TextView
                 android:id="@+id/lastMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Last message preview..."
                 android:textSize="14sp"
                 android:textColor="#6A3C66"/>
