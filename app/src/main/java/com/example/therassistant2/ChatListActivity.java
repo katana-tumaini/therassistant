@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +28,7 @@ public class ChatListActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     private List<Chat> chatList;
     private Button newchatbutton;
+    private Button retryButton;
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -35,6 +38,11 @@ public class ChatListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
+
+        // Check Google Play Services availability first
+        if (!checkGooglePlayServices()) {
+            Toast.makeText(this, "Google Play Services not available. Some features may not work.", Toast.LENGTH_LONG).show();
+        }
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -62,55 +70,87 @@ public class ChatListActivity extends AppCompatActivity {
             }
         });
 
+        // Add retry button functionality (you can add this button to your layout if needed)
+        retryButton = findViewById(R.id.RetryButton);
+        if (retryButton != null) {
+            retryButton.setOnClickListener(v -> {
+                Toast.makeText(this, "Retrying to load chats...", Toast.LENGTH_SHORT).show();
+                loadChats();
+            });
+        }
+
         loadChats();
     }
 
+    private boolean checkGooglePlayServices() {
+        GoogleApiAvailability gApi = GoogleApiAvailability.getInstance();
+        int resultCode = gApi.isGooglePlayServicesAvailable(this);
+        if (resultCode == ConnectionResult.SUCCESS) {
+            return true;
+        } else if (gApi.isUserResolvableError(resultCode)) {
+            // Show dialog to resolve the issue
+            gApi.getErrorDialog(this, resultCode, 9000).show();
+        } else {
+            Toast.makeText(this, "This device is not supported for Google Play Services.", Toast.LENGTH_LONG).show();
+        }
+        return false;
+    }
+
     private void loadChats() {
-        db.collection("chats")
-                .whereArrayContains("participants", currentUserId)
-                .orderBy("lastTimestamp", Query.Direction.DESCENDING)
-                .addSnapshotListener((value, error) -> {
+        try {
+            db.collection("chats")
+                    .whereArrayContains("participants", currentUserId)
+                    .orderBy("lastTimestamp", Query.Direction.DESCENDING)
+                    .addSnapshotListener((value, error) -> {
 
-                    if (error != null) {
-                        Toast.makeText(this, "Error loading chats: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                        if (error != null) {
+                            String errorMessage = error.getMessage();
+                            if (errorMessage != null && errorMessage.contains("Unknown calling package name")) {
+                                Toast.makeText(this, "Google Play Services error. Please restart app or check device settings.", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(this, "Error loading chats: " + errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                            return;
+                        }
 
-                    if (value == null || value.isEmpty()) {
+                        if (value == null || value.isEmpty()) {
+                            chatList.clear();
+                            chatAdapter.notifyDataSetChanged();
+                            return;
+                        }
+
                         chatList.clear();
-                        chatAdapter.notifyDataSetChanged();
-                        return;
-                    }
 
-                    chatList.clear();
+                        for (DocumentSnapshot doc : value.getDocuments()) {
 
-                    for (DocumentSnapshot doc : value.getDocuments()) {
+                            String chatId = doc.getId();
+                            List<String> participants = (List<String>) doc.get("participants");
 
-                        String chatId = doc.getId();
-                        List<String> participants = (List<String>) doc.get("participants");
+                            String lastMessage = doc.getString("lastMessage");
+                            Long lastTimestamp = doc.getLong("lastTimestamp");
 
-                        String lastMessage = doc.getString("lastMessage");
-                        Long lastTimestamp = doc.getLong("lastTimestamp");
+                            if (lastMessage == null) lastMessage = "No messages yet";
+                            if (lastTimestamp == null) lastTimestamp = 0L;
 
-                        if (lastMessage == null) lastMessage = "No messages yet";
-                        if (lastTimestamp == null) lastTimestamp = 0L;
-
-                        // Find other user ID
-                        String otherUserId = null;
-                        if (participants != null) {
-                            for (String id : participants) {
-                                if (!id.equals(currentUserId)) {
-                                    otherUserId = id;
-                                    break;
+                            // Find other user ID
+                            String otherUserId = null;
+                            if (participants != null) {
+                                for (String id : participants) {
+                                    if (!id.equals(currentUserId)) {
+                                        otherUserId = id;
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        if (otherUserId != null) {
-                            fetchUserDetailsAndAddChat(chatId, otherUserId, lastMessage, lastTimestamp);
+                            if (otherUserId != null) {
+                                fetchUserDetailsAndAddChat(chatId, otherUserId, lastMessage, lastTimestamp);
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to initialize chat loading: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void fetchUserDetailsAndAddChat(String chatId, String otherUserId, String lastMsg, long lastTs) {

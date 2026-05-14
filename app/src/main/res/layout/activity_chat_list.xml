@@ -35,4 +35,17 @@
         android:layout_margin="16dp"
 />
 
+    <Button
+        android:id="@+id/RetryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:text="Retry"
+        android:textSize="14sp"
+        android:layout_alignParentStart="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/rounded_button"
+        android:textColor="#4A2448"
+/>
+
 </RelativeLayout>
