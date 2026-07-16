@@ -49,32 +49,6 @@ public class NotificationsActivity extends AppCompatActivity {
         adapter = new NotificationsAdapter(this, db, notificationList);
         recyclerView.setAdapter(adapter);
 
-
-        findViewById(android.R.id.content).postDelayed(() -> {
-
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-            Map<String, Object> notification = new HashMap<>();
-            notification.put("userId", userId);
-            notification.put("title", "Test Notification");
-            notification.put("message", "Notifications are working!");
-            notification.put("timestamp", System.currentTimeMillis());
-            notification.put("read", false);
-
-            FirebaseFirestore.getInstance()
-                    .collection("notifications")
-                    .add(notification)
-                    .addOnSuccessListener(doc ->
-                            Toast.makeText(this,
-                                    "Test notification created",
-                                    Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e ->
-                            Toast.makeText(this,
-                                    e.getMessage(),
-                                    Toast.LENGTH_LONG).show());
-
-        }, 3000);
-
         // 1. Fetch, upload and sync registration Cloud Messaging token for this device
         syncDeviceFCMToken();
 
