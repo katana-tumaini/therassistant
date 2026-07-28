@@ -194,6 +194,7 @@ public class ChatListActivity extends AppCompatActivity {
                             fetchUserDetailsAndAddChat(
                                     chatId,
                                     otherUserId,
+                                    participants,
                                     lastMessage,
                                     lastTimestamp
                             );
@@ -204,6 +205,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     private void fetchUserDetailsAndAddChat(String chatId,
                                             String otherUserId,
+                                            List<String> participants,
                                             String lastMsg,
                                             long lastTs) {
 
@@ -238,6 +240,7 @@ public class ChatListActivity extends AppCompatActivity {
                         lastMsg,
                         lastTs
                 );
+                chat.setParticipants(participants);
 
                 addChatToList(chat);
 
@@ -274,6 +277,7 @@ public class ChatListActivity extends AppCompatActivity {
                                 lastMsg,
                                 lastTs
                         );
+                        chat.setParticipants(participants);
 
                         addChatToList(chat);
                     }
