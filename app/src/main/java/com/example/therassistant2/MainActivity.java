@@ -34,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            checkUserType(currentUser.getUid());
+            return;
+        }
+
         editTextText = findViewById(R.id.editTextText);
         editTextText2 = findViewById(R.id.editTextText2);
         editTextText2.setTransformationMethod(PasswordTransformationMethod.getInstance());
