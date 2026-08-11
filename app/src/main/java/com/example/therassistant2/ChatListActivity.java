@@ -209,7 +209,7 @@ public class ChatListActivity extends AppCompatActivity {
                                             String lastMsg,
                                             long lastTs) {
 
-        // 🔥 Fetch from Realtime Database
+        // Fetch from Realtime Database
         DatabaseReference therapistRef =
                 FirebaseDatabase.getInstance()
                         .getReference("therapists")
@@ -246,7 +246,7 @@ public class ChatListActivity extends AppCompatActivity {
 
             } else {
 
-                // 🔥 Fallback to users node
+                // Fallback to users node
                 DatabaseReference userRef =
                         FirebaseDatabase.getInstance()
                                 .getReference("users")

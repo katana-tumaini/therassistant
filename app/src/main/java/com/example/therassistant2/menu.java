@@ -2,9 +2,8 @@ package com.example.therassistant2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,14 +26,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 public class menu extends AppCompatActivity {
 
     private ImageView profileCircle, notificationBell;
     private LinearLayout therapistsButton;
     private LinearLayout calendarButton;
-    private LinearLayout upcomingSessionsButton;
     private FloatingActionButton messageButton;
     private TextView welcomeText, notificationBadge;
     private CardView nextSessionCard;
@@ -53,7 +50,6 @@ public class menu extends AppCompatActivity {
         profileCircle = findViewById(R.id.profileCircle);
         therapistsButton = findViewById(R.id.therapistsButton);
         calendarButton = findViewById(R.id.calendarButton);
-        //upcomingSessionsButton = findViewById(R.id.upcomingSessionsButton);
         messageButton = findViewById(R.id.messageButton);
         welcomeText = findViewById(R.id.welcomeText);
         notificationBell = findViewById(R.id.notificationBell);
@@ -71,7 +67,6 @@ public class menu extends AppCompatActivity {
         profileCircle.setOnClickListener(v -> showProfileOptions());
         therapistsButton.setOnClickListener(v -> openTherapistsActivity());
         calendarButton.setOnClickListener(v -> openCalendarActivity());
-        //upcomingSessionsButton.setOnClickListener(v -> openUpcomingSessionsActivity());
         messageButton.setOnClickListener(v -> openMessagesActivity());
         notificationBell.setOnClickListener(v -> openNotificationsActivity());
         nextSessionCard.setOnClickListener(v -> openUpcomingSessionsActivity());
@@ -202,11 +197,13 @@ public class menu extends AppCompatActivity {
     private void loadNextSession() {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null || user.getEmail() == null) {
+            Log.d("MENU_SESSION", "No logged-in user email, cannot load next session");
             showNoNextSession();
             return;
         }
 
         String currentUserEmail = user.getEmail();
+        Log.d("MENU_SESSION", "Loading sessions for: " + currentUserEmail);
 
         if (sessionsListener != null) {
             sessionsRef.removeEventListener(sessionsListener);
@@ -215,49 +212,101 @@ public class menu extends AppCompatActivity {
         sessionsListener = sessionsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("MENU_SESSION", "Sessions snapshot count: " + snapshot.getChildrenCount());
+
                 Session nextSession = null;
                 Date nextDate = null;
+                Session nearestPastSession = null;
+                Date nearestPastDate = null;
                 Date now = new Date();
-                SimpleDateFormat dateTimeFormat = new SimpleDateFormat("d/M/yyyy HH:mm", Locale.getDefault());
 
                 for (DataSnapshot sessionSnapshot : snapshot.getChildren()) {
-                    String therapistEmail = sessionSnapshot.child("therapistEmail").getValue(String.class);
-                    String clientEmail = sessionSnapshot.child("clientEmail").getValue(String.class);
+                    String therapistEmail = getString(sessionSnapshot, "therapistEmail");
+                    String clientEmail = getString(sessionSnapshot, "clientEmail");
 
                     if (!currentUserEmail.equalsIgnoreCase(therapistEmail)
                             && !currentUserEmail.equalsIgnoreCase(clientEmail)) {
                         continue;
                     }
 
-                    String date = sessionSnapshot.child("date").getValue(String.class);
-                    String time = sessionSnapshot.child("time").getValue(String.class);
+                    String date = getString(sessionSnapshot, "date");
+                    String time = getString(sessionSnapshot, "time");
 
-                    if (date == null || time == null) {
+                    if (date.isEmpty() || time.isEmpty()) {
+                        Log.d("MENU_SESSION", "Skipping session with empty date/time");
                         continue;
                     }
 
-                    try {
-                        Date sessionDate = dateTimeFormat.parse(date + " " + time);
-                        if (sessionDate != null && sessionDate.after(now)) {
-                            if (nextDate == null || sessionDate.before(nextDate)) {
-                                nextDate = sessionDate;
-                                nextSession = sessionSnapshot.getValue(Session.class);
-                            }
+                    Date sessionDate = parseSessionDateTime(date, time);
+                    if (sessionDate == null) {
+                        Log.d("MENU_SESSION", "Could not parse date/time: " + date + " " + time);
+                        continue;
+                    }
+
+                    Log.d("MENU_SESSION", "Candidate session: " + date + " " + time
+                            + " | therapist=" + therapistEmail + " | client=" + clientEmail);
+
+                    if (sessionDate.after(now)) {
+                        if (nextDate == null || sessionDate.before(nextDate)) {
+                            nextDate = sessionDate;
+                            nextSession = buildSessionFromSnapshot(sessionSnapshot);
+                            Log.d("MENU_SESSION", "New nearest upcoming session selected");
                         }
-                    } catch (ParseException e) {
-                        // Skip sessions with unparseable dates
+                    } else {
+                        if (nearestPastDate == null || sessionDate.after(nearestPastDate)) {
+                            nearestPastDate = sessionDate;
+                            nearestPastSession = buildSessionFromSnapshot(sessionSnapshot);
+                        }
                     }
                 }
 
-                Session sessionToDisplay = nextSession;
+                Session sessionToDisplay = nextSession != null ? nextSession : nearestPastSession;
+                Log.d("MENU_SESSION", "Final session to display: " + sessionToDisplay);
                 runOnUiThread(() -> displayNextSession(sessionToDisplay));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("MENU_SESSION", "Session load cancelled: " + error.getMessage());
                 showNoNextSession();
             }
         });
+    }
+
+    private Date parseSessionDateTime(String date, String time) {
+        String[] patterns = {
+                "d/M/yyyy HH:mm",
+                "d/M/yyyy H:mm",
+                "dd/MM/yyyy HH:mm",
+                "dd/MM/yyyy H:mm"
+        };
+
+        for (String pattern : patterns) {
+            try {
+                return new SimpleDateFormat(pattern, Locale.US).parse(date.trim() + " " + time.trim());
+            } catch (ParseException ignored) {
+            }
+        }
+
+        return null;
+    }
+
+    private Session buildSessionFromSnapshot(DataSnapshot sessionSnapshot) {
+        Session session = new Session();
+        session.setDate(getString(sessionSnapshot, "date"));
+        session.setTime(getString(sessionSnapshot, "time"));
+        session.setDetails(getString(sessionSnapshot, "details"));
+        session.setClientEmail(getString(sessionSnapshot, "clientEmail"));
+        session.setClientFirstName(getString(sessionSnapshot, "clientFirstName"));
+        session.setClientLastName(getString(sessionSnapshot, "clientLastName"));
+        session.setTherapistName(getString(sessionSnapshot, "therapistName"));
+        session.setTherapistEmail(getString(sessionSnapshot, "therapistEmail"));
+        return session;
+    }
+
+    private String getString(DataSnapshot snapshot, String key) {
+        String value = snapshot.child(key).getValue(String.class);
+        return value == null ? "" : value.trim();
     }
 
     private void displayNextSession(Session session) {
@@ -282,7 +331,6 @@ public class menu extends AppCompatActivity {
         nextSessionDateTime.setVisibility(View.GONE);
         nextSessionDetails.setVisibility(View.GONE);
     }
-
     private void openSettings() {
         Intent intent = new Intent(this, settings.class);
         startActivity(intent);
