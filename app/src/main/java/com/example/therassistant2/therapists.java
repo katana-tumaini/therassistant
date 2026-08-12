@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +33,10 @@ public class therapists extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CardAdapter adapter;
     private List<Therapist> therapistList;
+    private final Map<String, Long> cardViewsMap = new HashMap<>();
 
     private DatabaseReference therapistsRef;
+    private DatabaseReference cardViewsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +98,40 @@ public class therapists extends AppCompatActivity {
 
         therapistsRef = FirebaseDatabase.getInstance().getReference("therapists");
 
-        loadTherapistsFromFirebase();
+        loadCardViewsThenTherapists();
         attachItemTouchHelper();
     }
     
+    private void loadCardViewsThenTherapists() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            loadTherapistsFromFirebase();
+            return;
+        }
+
+        cardViewsRef = FirebaseDatabase.getInstance()
+                .getReference("cardViews")
+                .child(user.getUid());
+
+        cardViewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                cardViewsMap.clear();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Long timestamp = child.getValue(Long.class);
+                    if (timestamp == null) timestamp = 0L;
+                    cardViewsMap.put(child.getKey(), timestamp);
+                }
+                loadTherapistsFromFirebase();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                loadTherapistsFromFirebase();
+            }
+        });
+    }
+
     private void loadTherapistsFromFirebase() {
         therapistsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -113,26 +147,44 @@ public class therapists extends AppCompatActivity {
                         String uid = postSnapshot.getKey();
                         therapist.setUid(uid);
 
-                        // OPTIONAL: If your Therapist has firstName + lastName in Firebase,
-                        // you can create a display name here if needed
                         if (therapist.getFirstName() != null && therapist.getLastName() != null) {
                             therapist.setName(therapist.getFirstName() + " " + therapist.getLastName());
                         }
 
-                        Log.d(TAG, "Loaded therapist: " + therapist.getFirstName() + " " + therapist.getLastName());
                         therapistList.add(therapist);
-
                     } else {
                         Log.e(TAG, "Therapist data is null");
                     }
                 }
 
+                sortTherapistsByRecency();
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(therapists.this, "Failed to load therapists", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sortTherapistsByRecency() {
+        Collections.sort(therapistList, new Comparator<Therapist>() {
+            @Override
+            public int compare(Therapist t1, Therapist t2) {
+                String uid1 = t1.getUid();
+                String uid2 = t2.getUid();
+                Long time1 = uid1 != null ? cardViewsMap.get(uid1) : null;
+                Long time2 = uid2 != null ? cardViewsMap.get(uid2) : null;
+
+                boolean seen1 = time1 != null;
+                boolean seen2 = time2 != null;
+
+                if (!seen1 && !seen2) return 0;
+                if (!seen1) return -1;
+                if (!seen2) return 1;
+
+                return Long.compare(time1, time2);
             }
         });
     }
@@ -161,11 +213,13 @@ public class therapists extends AppCompatActivity {
 
                         if (direction == ItemTouchHelper.LEFT) {
                             // SKIP
+                            recordCardView(therapist.getUid());
                             therapistList.remove(position);
                             adapter.notifyDataSetChanged();
 
                         } else if (direction == ItemTouchHelper.UP) {
                             // SAVE to Interested In list
+                            recordCardView(therapist.getUid());
                             saveToInterestedList(therapist);
 
                             therapistList.remove(position);
@@ -175,6 +229,15 @@ public class therapists extends AppCompatActivity {
                 };
 
         new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
+    }
+
+    private void recordCardView(String therapistUid) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || therapistUid == null || cardViewsRef == null) return;
+
+        long now = System.currentTimeMillis();
+        cardViewsMap.put(therapistUid, now);
+        cardViewsRef.child(therapistUid).setValue(now);
     }
 
     private void saveToInterestedList(Therapist therapist) {
