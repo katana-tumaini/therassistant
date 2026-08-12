@@ -54,6 +54,7 @@ public class TherapistProfile extends AppCompatActivity {
 
                 intent.putExtra("therapistId", therapist.getUid());
                 intent.putExtra("therapistName", fullName);
+                intent.putExtra("therapistEmail", therapist.getEmail());
                 intent.putExtra("availability", therapist.getAvailability());
 
                 startActivity(intent);

@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -74,34 +76,25 @@ public class BookingRequestsAdapter extends RecyclerView.Adapter<BookingRequests
 
     private void acceptRequest(ModelBookingRequests request) {
 
-        // Update request status
         db.collection("bookingRequests")
                 .document(request.getRequestId())
-                .update("status", "accepted");
-
-        // Create session
-        Session session = new Session(
-                request.getDate(),
-                request.getTime(),
-                request.getMeetingType(),
-                "client@email.com",
-                request.getClientName(),
-                "",
-                "Therapist",
-                "therapist@email.com"
-        );
-
-        db.collection("sessions").add(session);
-
-        Toast.makeText(context, "Session Accepted", Toast.LENGTH_SHORT).show();
+                .update("status", "accepted")
+                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Session Accepted", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "Failed to accept request", Toast.LENGTH_SHORT).show());
     }
 
     private void declineRequest(ModelBookingRequests request) {
 
         db.collection("bookingRequests")
                 .document(request.getRequestId())
-                .update("status", "declined");
-
-        Toast.makeText(context, "Session Declined", Toast.LENGTH_SHORT).show();
+                .update("status", "declined")
+                .addOnSuccessListener(aVoid -> {
+                    if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
+                        DatabaseReference sessionsRef = FirebaseDatabase.getInstance().getReference("sessions").child(request.getSessionId());
+                        sessionsRef.removeValue();
+                    }
+                    Toast.makeText(context, "Session Declined", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(context, "Failed to decline request", Toast.LENGTH_SHORT).show());
     }
 }

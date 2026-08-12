@@ -18,6 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,8 +45,13 @@ public class BookingActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+    private DatabaseReference sessionsRef;
+    private DatabaseReference clientsRef;
+    private DatabaseReference therapistsRef;
 
     private String therapistId;
+    private String therapistName;
+    private String therapistEmail;
     private CalendarDay selectedDate;
 
     private final int SESSION_LIMIT = 2;
@@ -63,9 +74,17 @@ public class BookingActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+        sessionsRef = FirebaseDatabase.getInstance().getReference("sessions");
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            clientsRef = FirebaseDatabase.getInstance().getReference("clients").child(currentUser.getUid());
+        }
+        therapistsRef = FirebaseDatabase.getInstance().getReference("therapists");
 
         therapistId = getIntent().getStringExtra("therapistId");
-        String therapistName = getIntent().getStringExtra("therapistName");
+        therapistName = getIntent().getStringExtra("therapistName");
+        therapistEmail = getIntent().getStringExtra("therapistEmail");
         String availability = getIntent().getStringExtra("availability");
 
         if (therapistName != null) {
@@ -211,9 +230,25 @@ public class BookingActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void checkAndBook(String date, String time, String meetingType) {
+    private void checkAndBook(String requestDate, String time, String meetingType) {
 
-        int currentCount = bookingCountMap.getOrDefault(date, 0);
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "Please log in first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (therapistId == null) {
+            Toast.makeText(this, "Therapist not selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (selectedDate == null) {
+            Toast.makeText(this, "Select a date first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int currentCount = bookingCountMap.getOrDefault(requestDate, 0);
 
         if (currentCount >= SESSION_LIMIT) {
             Toast.makeText(this,
@@ -222,30 +257,132 @@ public class BookingActivity extends AppCompatActivity {
             return;
         }
 
-        Map<String, Object> booking = new HashMap<>();
+        String sessionDate = formatDateForSession(selectedDate);
+        fetchDetailsAndSave(requestDate, sessionDate, time, meetingType);
+    }
 
+    private void fetchDetailsAndSave(String requestDate, String sessionDate, String time, String meetingType) {
+
+        Runnable fetchClientAndSave = () -> {
+            if (clientsRef == null) {
+                Toast.makeText(BookingActivity.this, "Client data not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            clientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    FirebaseUser user = auth.getCurrentUser();
+                    String clientEmail = user != null ? user.getEmail() : "";
+                    String clientFirstName = "";
+                    String clientLastName = "";
+
+                    if (snapshot.exists()) {
+                        String email = snapshot.child("email").getValue(String.class);
+                        String firstName = snapshot.child("firstName").getValue(String.class);
+                        String lastName = snapshot.child("lastName").getValue(String.class);
+
+                        if (email != null) clientEmail = email;
+                        if (firstName != null) clientFirstName = firstName;
+                        if (lastName != null) clientLastName = lastName;
+                    }
+
+                    saveBookingAndSession(requestDate, sessionDate, time, meetingType,
+                            clientEmail, clientFirstName, clientLastName);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(BookingActivity.this,
+                            "Failed to load client details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        };
+
+        if (therapistEmail == null || therapistEmail.isEmpty()) {
+            therapistsRef.child(therapistId).child("email")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            therapistEmail = snapshot.getValue(String.class);
+                            if (therapistEmail == null) therapistEmail = "";
+                            fetchClientAndSave.run();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(BookingActivity.this,
+                                    "Failed to load therapist details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            fetchClientAndSave.run();
+        }
+    }
+
+    private void saveBookingAndSession(String requestDate, String sessionDate, String time,
+                                       String meetingType, String clientEmail,
+                                       String clientFirstName, String clientLastName) {
+
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) return;
+
+        String displayTherapistName = therapistName != null ? therapistName : therapistNameHeader.getText().toString();
+        String displayTherapistEmail = therapistEmail != null ? therapistEmail : "";
+
+        String sessionId = sessionsRef.push().getKey();
+
+        Map<String, Object> session = new HashMap<>();
+        session.put("date", sessionDate);
+        session.put("time", time);
+        session.put("details", meetingType);
+        session.put("clientEmail", clientEmail);
+        session.put("clientFirstName", clientFirstName);
+        session.put("clientLastName", clientLastName);
+        session.put("therapistName", displayTherapistName);
+        session.put("therapistEmail", displayTherapistEmail);
+
+        Map<String, Object> booking = new HashMap<>();
         booking.put("therapistId", therapistId);
-        booking.put("clientId", auth.getCurrentUser().getUid());
-        booking.put("date", date);
+        booking.put("therapistName", displayTherapistName);
+        booking.put("therapistEmail", displayTherapistEmail);
+        booking.put("clientId", user.getUid());
+        booking.put("clientName", (clientFirstName + " " + clientLastName).trim());
+        booking.put("clientEmail", clientEmail);
+        booking.put("clientFirstName", clientFirstName);
+        booking.put("clientLastName", clientLastName);
+        booking.put("date", requestDate);
         booking.put("time", time);
         booking.put("meetingType", meetingType);
         booking.put("status", "pending");
+        booking.put("sessionId", sessionId);
         booking.put("timestamp", System.currentTimeMillis());
 
-        db.collection("bookingRequests")
-                .add(booking)
-                .addOnSuccessListener(doc -> {
+        if (sessionId == null) {
+            db.collection("bookingRequests")
+                    .add(booking)
+                    .addOnSuccessListener(doc -> {
+                        Toast.makeText(BookingActivity.this, "Booking request sent!", Toast.LENGTH_SHORT).show();
+                        loadAllBookings();
+                    })
+                    .addOnFailureListener(e ->
+                            Toast.makeText(BookingActivity.this, "Failed to send request", Toast.LENGTH_SHORT).show());
+            return;
+        }
 
-                    Toast.makeText(this,
-                            "Booking request sent!",
-                            Toast.LENGTH_SHORT).show();
-
-                    loadAllBookings();
-                })
+        sessionsRef.child(sessionId).setValue(session)
+                .addOnSuccessListener(aVoid -> db.collection("bookingRequests")
+                        .add(booking)
+                        .addOnSuccessListener(doc -> {
+                            Toast.makeText(BookingActivity.this, "Booking request sent!", Toast.LENGTH_SHORT).show();
+                            loadAllBookings();
+                        })
+                        .addOnFailureListener(e ->
+                                Toast.makeText(BookingActivity.this, "Failed to send request", Toast.LENGTH_SHORT).show()))
                 .addOnFailureListener(e ->
-                        Toast.makeText(this,
-                                "Failed to send request",
-                                Toast.LENGTH_SHORT).show());
+                        Toast.makeText(BookingActivity.this, "Failed to save session", Toast.LENGTH_SHORT).show());
     }
 
     private String formatDate(CalendarDay date) {
@@ -254,6 +391,14 @@ public class BookingActivity extends AppCompatActivity {
                 date.getYear(),
                 date.getMonth(),
                 date.getDay());
+    }
+
+    private String formatDateForSession(CalendarDay date) {
+        return String.format(Locale.getDefault(),
+                "%d/%d/%d",
+                date.getDay(),
+                date.getMonth(),
+                date.getYear());
     }
 
     private CalendarDay stringToCalendarDay(String dateStr) {

@@ -137,7 +137,7 @@ public class menu extends AppCompatActivity {
     }
 
     private void openCalendarActivity() {
-        Intent intent = new Intent(this, BookingActivity.class);
+        Intent intent = new Intent(this, InterestedTherapistsActivity.class);
         startActivity(intent);
     }
 

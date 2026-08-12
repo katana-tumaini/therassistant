@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,7 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class therapists extends AppCompatActivity {
 
@@ -161,8 +165,8 @@ public class therapists extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
 
                         } else if (direction == ItemTouchHelper.UP) {
-                            // ACCEPT → messaging
-                            openMessaging(therapist);
+                            // SAVE to Interested In list
+                            saveToInterestedList(therapist);
 
                             therapistList.remove(position);
                             adapter.notifyDataSetChanged();
@@ -173,18 +177,42 @@ public class therapists extends AppCompatActivity {
         new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
     }
 
-    private void openMessaging(Therapist therapist) {
+    private void saveToInterestedList(Therapist therapist) {
 
-        Intent intent = new Intent(therapists.this, messaging.class);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "Please log in first", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // These match what your old code used:
-        intent.putExtra("receiverId", therapist.getUid());
-        intent.putExtra("receiverName", therapist.getFirstName() + " " + therapist.getLastName());
+        if (therapist.getUid() == null) {
+            Toast.makeText(this, "Could not save therapist", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Extra useful data if you want:
-        intent.putExtra("therapistType", therapist.gettherapisttype());
-        intent.putExtra("profileImageUrl", therapist.getProfileImageUrl());
+        DatabaseReference interestRef = FirebaseDatabase.getInstance()
+                .getReference("interests")
+                .child(user.getUid())
+                .child(therapist.getUid());
 
-        startActivity(intent);
+        Map<String, Object> values = new HashMap<>();
+        values.put("uid", therapist.getUid());
+        values.put("firstName", therapist.getFirstName());
+        values.put("lastName", therapist.getLastName());
+        values.put("name", therapist.getName());
+        values.put("therapistType", therapist.gettherapisttype());
+        values.put("availability", therapist.getAvailability());
+        values.put("profileImageUrl", therapist.getProfileImageUrl());
+        values.put("timestamp", System.currentTimeMillis());
+
+        interestRef.setValue(values)
+                .addOnSuccessListener(aVoid ->
+                        Toast.makeText(therapists.this,
+                                "Added to Interested In",
+                                Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e ->
+                        Toast.makeText(therapists.this,
+                                "Failed to save therapist",
+                                Toast.LENGTH_SHORT).show());
     }
 }

@@ -9,12 +9,13 @@ public class ModelBookingRequests {
     private String time;
     private String status;
     private String meetingType;
+    private String sessionId;
 
     public ModelBookingRequests(){
 
     }
 
-    public ModelBookingRequests(String requestId, String clientId, String clientName, String therapistId, String date, String time, String status, String meetingType){
+    public ModelBookingRequests(String requestId, String clientId, String clientName, String therapistId, String date, String time, String status, String meetingType, String sessionId){
         this.requestId = requestId;
         this.clientId = clientId;
         this.clientName = clientName;
@@ -23,6 +24,7 @@ public class ModelBookingRequests {
         this.time = time;
         this.status = status;
         this.meetingType = meetingType;
+        this.sessionId = sessionId;
     }
 
     public String getRequestId() {
@@ -87,5 +89,13 @@ public class ModelBookingRequests {
 
     public void setMeetingType(String meetingType) {
         this.meetingType = meetingType;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

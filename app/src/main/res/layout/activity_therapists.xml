@@ -23,7 +23,7 @@
         android:id="@+id/swipeInstructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Swipe up to connect • Swipe left to skip"
+        android:text="Swipe up to save • Swipe left to skip"
         android:textSize="14sp"
         android:textColor="#666666"
         android:layout_marginBottom="24dp"

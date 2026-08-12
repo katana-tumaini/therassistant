@@ -33,6 +33,7 @@
         </service>
 
         <activity android:name=".UpcomingSessionsActivity" android:exported="true" />
+        <activity android:name=".InterestedTherapistsActivity" android:exported="true" />
         <activity android:name=".EditTherapistActivity" android:exported="true" />
         <activity android:name=".ChatListActivity" android:exported="true" />
         <activity android:name=".AddEditClientActivity" android:exported="true" />
