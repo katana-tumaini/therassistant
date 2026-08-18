@@ -99,6 +99,7 @@
                 android:layout_marginTop="8dp"
                 app:hintTextColor="@color/black"
                 app:hintEnabled="false"
+                app:passwordToggleTint="@color/black"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -118,7 +119,7 @@
                 android:layout_marginTop="8dp"
                 app:hintTextColor="@color/black"
                 app:hintEnabled="false"
-
+                app:passwordToggleTint="@color/black"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText

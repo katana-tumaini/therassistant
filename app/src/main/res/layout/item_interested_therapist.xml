@@ -20,6 +20,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:scaleType="centerCrop"
+            android:background="@drawable/circular_background"
             android:src="@drawable/baseline_account_circle_24" />
 
         <LinearLayout

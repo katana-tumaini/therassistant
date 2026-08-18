@@ -13,7 +13,7 @@
         android:layout_margin="20dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
-        app:cardBackgroundColor="#F7E6FA"
+        app:cardBackgroundColor="#E0B0FF"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +30,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
+                android:background="@drawable/circular_background"
                 android:src="@drawable/baseline_account_circle_24" />
 
             <Button
@@ -38,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Upload Image"
+                android:backgroundTint="#641BE4"
                 android:layout_marginBottom="15dp" />
 
             <EditText
@@ -46,13 +48,15 @@
                 android:layout_height="wrap_content"
                 android:hint="First Name"
                 android:background="@drawable/rounded_button"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+                android:textColorHint="@color/black"/>
 
             <EditText
                 android:id="@+id/editLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Last Name"
+                android:textColorHint="@color/black"
                 android:background="@drawable/rounded_button"
                 android:layout_marginBottom="12dp" />
 
@@ -61,24 +65,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
+                android:textColorHint="@color/black"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/rounded_button"
                 android:layout_marginBottom="12dp" />
 
-            <EditText
-                android:id="@+id/editPassword"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:background="@drawable/rounded_button"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/black"
+                app:hintEnabled="false">
+
+                <EditText
+                    android:id="@+id/editPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:textColorHint="@color/black"
+                    android:inputType="textPassword"
+                    android:background="@drawable/rounded_button"
+                    android:padding="12dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save" />
+                android:text="Save"
+                android:backgroundTint="#641BE4"/>
 
         </LinearLayout>
 

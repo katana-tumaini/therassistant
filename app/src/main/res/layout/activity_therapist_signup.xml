@@ -132,6 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/black"
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -152,6 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/black"
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
