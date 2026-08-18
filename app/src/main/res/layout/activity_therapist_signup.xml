@@ -83,6 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="First Name"
+                        android:textColorHint="@color/black"
                         android:padding="14dp"
                         android:background="@drawable/rounded_button"
                         android:textColor="@android:color/black" />
@@ -101,6 +102,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Last Name"
                         android:padding="14dp"
+                        android:textColorHint="@color/black"
                         android:background="@drawable/rounded_button"
                         android:textColor="@android:color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -118,6 +120,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Email"
                         android:inputType="textEmailAddress"
+                        android:textColorHint="@color/black"
                         android:padding="14dp"
                         android:background="@drawable/rounded_button"
                         android:textColor="@android:color/black" />
@@ -136,6 +139,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Password"
+                        android:textColorHint="@color/black"
                         android:inputType="textPassword"
                         android:padding="14dp"
                         android:background="@drawable/rounded_button"
@@ -155,6 +159,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Confirm Password"
+                        android:textColorHint="@color/black"
                         android:inputType="textPassword"
                         android:padding="14dp"
                         android:background="@drawable/rounded_button"
@@ -173,6 +178,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Therapist Type (e.g. Child Therapist)"
+                        android:textColorHint="@color/black"
                         android:padding="14dp"
                         android:background="@drawable/rounded_button"
                         android:textColor="@android:color/black" />
@@ -190,6 +196,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Availability (e.g. Tue and Thu 1pm - 6pm)"
+                        android:textColorHint="@color/black"
                         android:padding="14dp"
                         android:background="@drawable/rounded_button"
                         android:textColor="@android:color/black" />
@@ -207,6 +214,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Phone Number"
+                        android:textColorHint="@color/black"
                         android:inputType="phone"
                         android:padding="14dp"
                         android:background="@drawable/rounded_button"
